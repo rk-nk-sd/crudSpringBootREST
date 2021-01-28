@@ -48,7 +48,7 @@ public class MainController {
     }
 
     @PostMapping("/users")
-    public String create (@ModelAttribute("user") @Valid User user, BindingResult bindingResult){
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return "users/new";
         userService.createUser(user);
@@ -61,7 +61,7 @@ public class MainController {
         return "users/edit";
     }
     @PatchMapping("/users/{id}")
-    public String update (@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id){
+    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id){
         //Обновляет пользователя
         if(bindingResult.hasErrors())
             return "users/edit";
@@ -69,7 +69,7 @@ public class MainController {
         return "redirect:/users";
     }
     @DeleteMapping("/users/{id}")
-    public String delete ( @PathVariable("id") long id){
+    public String delete( @PathVariable("id") long id){
         //Удаляет пользователя
         userService.delete(id);
         return "redirect:/users";
