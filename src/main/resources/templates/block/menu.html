@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-    <div class="col-sm-4" th:fragment="menu">
+    <div class="col-sm-4" th:fragment="menuAdmin">
         <ul class="nav">
             <li class="nav-header">Главные ссылки</li>
-            <li class="active"><a href="#">Главная</a></li>
+            <li class="active"><a href="/">Главная</a></li>
             <li><a href="/admin/users">Пользователи</a></li>
             <li><a href="/admin/roles">Роли и права</a></li>
             <li class="nav-header">Дополнительные</li>
             <li><a href="/users">Профиль</a></li>
-            <li><a href="#">Календарь мероприятий</a></li>
-            <li class="nav-divider"></li>
-            <li><a href="#">Вакансии</a></li>
+        </ul>
+    </div>
+
+    <div class="col-sm-4" th:fragment="menuUser">
+        <ul class="nav">
+            <li class="nav-header">Главные ссылки</li>
+            <li class="active"><a href="/">Главная</a></li>
+            <li><a href="/users">Профиль</a></li>
         </ul>
     </div>
 
