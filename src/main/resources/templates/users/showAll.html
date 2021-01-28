@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/block/head :: head"></head>
+<body>
+<h1>Список пользователей</h1>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+        <th:block th:each="user : ${users}">
+            <tr>
+                <td>
+                    <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getId()}"></a>
+                </td>
+                <td>
+                    <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getName()}"></a>
+                </td>
+                <td>
+                    <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getSurname()}"></a>
+                </td>
+                <td>
+                    <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getEmail()}"></a>
+                </td>
+                <td>
+                    <a th:href="@{/users/{id}(id=${user.getId()})}" class="c">Сведения</a>
+                    <a th:href="@{/users/{id}/edit(id=${user.getId()})}" class="c">Редактировать</a>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+    <br/>
+    <hr/>
+    <a href="/users/new">Создать нового пользователя</a>
+
+</body>
+</html>
