@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/block/head :: head"></head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-lg-7"><h1>Редактировать роль</h1></div>
+        <div class="col-sm-6 col-lg-5">
+            <h6 class="hi">Привет, <th:block th:text="${userinfo.name}"></th:block>! | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h6>
+            <th:block th:if="${userinfo.name} != null">
+                <form id="logoutForm" th:method="post" th:action="@{/logout}">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </th:block>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 col-lg-3"><!-- <h1>Список пользователей</h1> --></div>
+        <div class="col-sm-9 col-lg-9"><a href="/admin/roles/new-role" class="c">Добавить новую роль</a></div>
+    </div>
+    <div class="row castom">
+<!--                Меню-->
+        <div class="col-sm-4">
+            <ul class="nav">
+                <li class="nav-header">Главные ссылки</li>
+                <li class="active"><a href="#">Главная</a></li>
+                <li><a href="/admin/users">Пользователи</a></li>
+                <li><a href="/admin/roles">Роли и права</a></li>
+                <li class="nav-header">Дополнительные</li>
+                <li><a href="/users">Профиль</a></li>
+                <li><a href="#">Календарь мероприятий</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="#">Вакансии</a></li>
+            </ul>
+        </div>
+<!--            Основной контейнер-->
+        <div class="col-sm-8">
+            <form th:method="patch" th:action="@{/admin/roles/{id}(id=${role.getId()})}">
+
+                ID: <th:block th:text="${role.getId()}"/>
+                </p>
+
+                Edit user role:
+                </p>
+                <input type="text" name="rolename" th:value="${role.getName()}" required/>
+<!--                <div th:if="${#fields.hasErrors('rolename')}"></div>-->
+                </p>
+
+                <input type="submit" value="Сохранить" />
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12"><!--Подвал--></div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+</body>
+</html>

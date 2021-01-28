@@ -1,71 +1,107 @@
 package web.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
-@Table(name = "users_crud")
-public class User {
+@Table(name = "users")
+public class User implements UserDetails {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @NotEmpty(message = "Поле не должно быть пустым!")
-    @Size(min = 2, max = 25, message = "от 2 до 25 символов")
-    private String name;
+    @Column(name = "username")
+    private String login;
 
     @NotEmpty(message = "Поле не должно быть пустым!")
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "password")
+    private String password;
 
-    @NotEmpty(message = "Поле не должно быть пустым!")
-    @Email(message = "Не корректно указан адрес эл.почты")
-    private String email;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public User() {
     }
 
     // Конструктор для UserDaoArrayListImpl - id поле в реальной БД будет присваиваться автоматически
-    public User(long id, String name, String surname, String email) {
+
+
+    public User(int id, @NotEmpty(message = "Поле не должно быть пустым!") String login, @NotEmpty(message = "Поле не должно быть пустым!") String password, Set<Role> roles) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.roles = roles;
     }
 
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public String getSurname() {
-        return surname;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public String getEmail() {
-        return email;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

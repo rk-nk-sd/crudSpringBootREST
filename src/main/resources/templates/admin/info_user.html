@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/block/head :: head"></head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-lg-7"><h1>Сведения о пользователе</h1></div>
+        <div class="col-sm-6 col-lg-5">
+            <h6 class="hi">Привет, <th:block th:text="${userinfo.name}"></th:block>! | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h6>
+            <th:block th:if="${userinfo.name} != null">
+                <form id="logoutForm" th:method="post" th:action="@{/logout}">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </th:block>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 col-lg-3"><!-- <h1>Список пользователей</h1> --></div>
+        <div class="col-sm-9 col-lg-9"><a href="/admin/users/new-user" class="c">Добавить нового пользователя</a> <a th:href="@{/admin/users/{id}/edit(id=${user.getId()})}" class="c">Редактировать</a></div>
+    </div>
+    <div class="row castom">
+<!--                Меню-->
+        <div class="col-sm-4">
+            <ul class="nav">
+                <li class="nav-header">Главные ссылки</li>
+                <li class="active"><a href="/admin">Главная</a></li>
+                <li><a href="/admin/users">Пользователи</a></li>
+                <li><a href="/admin/roles">Роли и права</a></li>
+                <li class="nav-header">Дополнительные</li>
+                <li><a href="/users">Профиль</a></li>
+                <li><a href="#">Календарь мероприятий</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="#">Вакансии</a></li>
+            </ul>
+        </div>
+<!--            Основной контейнер-->
+        <div class="col-sm-8">
+            <table>
+                <tr>
+                    <td>Id</td>
+                    <td th:text="${user.getId()}"></td>
+                </tr>
+                <tr>
+                    <td>Логин</td>
+                    <td th:text="${user.getLogin()}"></td>
+                </tr>
+                <tr>
+                    <td>Пароль</td>
+                    <td th:text="${user.getPassword()}"></td>
+                </tr>
+                <tr>
+                    <td>Роль</td>
+                    <td>
+                        <th:block th:each="role : ${user.roles}">
+                            <p th:text="${role.getName()}"></p>
+                        </th:block>
+                    </td>
+                </tr>
+            </table>
+            <form th:method="delete" actions="/admin/users/${user.getId()}">
+                <input type="submit" value="Delete"/>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12"><!--Подвал--></div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script th:src="@{contextPath/resources/js/bootstrap.min.js}"></script>
+</body>
+</html>
