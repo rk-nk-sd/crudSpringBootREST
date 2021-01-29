@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Login form</title>
-    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.min.css}" type="text/css"/>
-    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"/>
-</head>
-<body>
-<h1>Form</h1>
-<div  id="container">
-    <form method="post" action="/login">
-        <input type="text" name="j_username"/>
-        <input type="password" name="j_password"/>
-        <input type="submit"/>
-    </form>
-</div>
-</body>
+    <head th:replace="/block/head :: head"></head>
+    <body>
+        <h1>Form</h1>
+        <div  id="container">
+            <form method="post" action="/login">
+                <input type="text" name="j_username"/>
+                <input type="password" name="j_password"/>
+                <input type="submit"/>
+            </form>
+        </div>
+        <th:block th:replace="/block/footer :: script"></th:block>
+    </body>
 </html>
