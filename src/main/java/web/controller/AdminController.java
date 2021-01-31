@@ -142,7 +142,7 @@ public class AdminController {
     @PostMapping("/users")
     public String createUser (@ModelAttribute("user") @Valid User user,
                               BindingResult bindingResult,
-                              @RequestParam(name = "login") String login,
+                              @RequestParam(name = "email") String email,
                               @RequestParam(name = "password") String password){
         if(bindingResult.hasErrors())
             return "admin/create_user";
@@ -150,7 +150,7 @@ public class AdminController {
         Set<Role> roles = new HashSet<>();
         roles.add(userService.findByRoleName("ROLE_USER"));
 
-        user.setLogin(login);
+        user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setRoles(roles);
 
@@ -162,7 +162,8 @@ public class AdminController {
     public String update (@ModelAttribute("user") @Valid User user,
                           BindingResult bindingResult,
                           @PathVariable("id") int id,
-                          @RequestParam(name = "login") String login,
+//                          @RequestParam(name = "firstname") String firstname,
+                          @RequestParam(name = "email") String email,
                           @RequestParam(name = "password") String password,
                           @RequestParam(name = "addrole") String[] role){
         //Обновляет пользователя
@@ -179,7 +180,8 @@ public class AdminController {
 //        roles.add(userService.findByRoleName(role));
 //        roles.add(userService.findByRoleName("ROLE_USER"));
 
-        user.setLogin(login);
+//        user.setFirstName(firstname);
+        user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setRoles(roles);
 

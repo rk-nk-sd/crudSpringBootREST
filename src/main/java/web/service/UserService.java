@@ -12,7 +12,7 @@ public interface UserService {
     User update(User user);
     List<User> getAllUsers();
 
-    User findByUserName(String username);
+    User findByUserEmail(String email);
 
     Role findByRoleName(String role);
 }

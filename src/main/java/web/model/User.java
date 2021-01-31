@@ -1,5 +1,7 @@
 package web.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +11,8 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
+//@Data
+//@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -17,8 +21,19 @@ public class User implements UserDetails {
     private int id;
 
     @NotEmpty(message = "Поле не должно быть пустым!")
-    @Column(name = "username")
-    private String login;
+    @Column(name = "firstname")
+    private String firstName;
+
+    @NotEmpty(message = "Поле не должно быть пустым!")
+    @Column(name = "lastname")
+    private String lastName;
+
+    @Column(name = "age")
+    private int age;
+
+    @NotEmpty(message = "Поле не должно быть пустым!")
+    @Column(name = "email")
+    private String email;
 
     @NotEmpty(message = "Поле не должно быть пустым!")
     @Column(name = "password")
@@ -33,12 +48,12 @@ public class User implements UserDetails {
     public User() {
     }
 
-    // Конструктор для UserDaoArrayListImpl - id поле в реальной БД будет присваиваться автоматически
-
-
-    public User(int id, @NotEmpty(message = "Поле не должно быть пустым!") String login, @NotEmpty(message = "Поле не должно быть пустым!") String password, Set<Role> roles) {
+    public User(int id, @NotEmpty(message = "Поле не должно быть пустым!") String firstName, @NotEmpty(message = "Поле не должно быть пустым!") String lastName, int age, @NotEmpty(message = "Поле не должно быть пустым!") String email, @NotEmpty(message = "Поле не должно быть пустым!") String password, Set<Role> roles) {
         this.id = id;
-        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
         this.password = password;
         this.roles = roles;
     }
@@ -51,12 +66,36 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
@@ -82,7 +121,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override

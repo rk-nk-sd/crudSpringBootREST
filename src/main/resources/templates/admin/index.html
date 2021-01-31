@@ -32,7 +32,7 @@
 <!--                    <a href="/admin/users/{id}(id=${user.getId()})">-->
                     <tr th:onclick="|loadContent('/admin/users/{id}(id=${user.getId()})}')|" onclick="window.location.href='/admin/users/{id}(id=${user.getId()})'">
                         <th scope="row"><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getId()}"></a></th>
-                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getLogin()}"></a></td>
+                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getEmail()}"></a></td>
                         <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getPassword()}"></a></td>
                         <td>
                             <th:block th:each="role : ${user.roles}">

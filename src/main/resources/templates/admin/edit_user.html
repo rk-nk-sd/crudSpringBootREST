@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:e-mail="http://www.w3.org/1999/xhtml">
 <head th:replace="/block/head :: head"></head>
 <body>
     <header th:replace="/block/header :: header"></header>
@@ -23,9 +23,14 @@
                 ID: <th:block th:text="${user.getId()}"></th:block>
                 </p>
 
-                Edit user login:
-                <input type="text" name="login" th:value="${user.getLogin()}" required/>
-                <div th:if="${#fields.hasErrors('login')}"></div>
+<!--                Edit first name:-->
+<!--                <input type="text" name="firstname" th:value="${user.getFirstName()}" required/>-->
+<!--                <div th:if="${#fields.hasErrors('firstname')}"></div>-->
+<!--                </p>-->
+
+                Edit user e-mail:
+                <input type="email" name="email" th:value="${user.getEmail()}" required/>
+                <div th:if="${#fields.hasErrors('email')}"></div>
                 </p>
 
                 Edit user password:
