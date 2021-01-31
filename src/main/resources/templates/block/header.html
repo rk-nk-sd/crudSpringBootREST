@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-    <div class="col-sm-6 col-lg-5" th:fragment="userNameAndLogout">
-        <h6 class="hi">Привет, <th:block th:text="${userinfo.name}"></th:block>! | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h6>
+    <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex" style="color: rgb(216, 218, 219); cursor: pointer;" th:fragment="logout">
+        <h6 class="hi"><a onclick="document.forms['logoutForm'].submit()">Logout</a></h6>
         <th:block th:if="${userinfo.name} != null">
             <form id="logoutForm" th:method="post" th:action="@{/logout}">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </form>
         </th:block>
     </div>
+
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="header">
+        <div class="navbar-brand mb-0 h1">e-mail with roles: <th:block th:text="${userinfo.getName()}"></th:block></div>
+        <div th:replace="/block/header :: logout"></div>
+    </header>
 
 </html>

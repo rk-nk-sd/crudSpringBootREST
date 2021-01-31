@@ -2,26 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/block/head :: head"></head>
 <body>
-<div class="container">
+    <header th:replace="/block/header :: header"></header>
 
-    <div class="row"  th:fragment="user">
-        <div class="col-sm-6 col-lg-7"><h1>Профайл пользоватя</h1></div>
-        <div th:replace="/block/header :: userNameAndLogout"></div>
-    </div>
+<div class="container-fluid">
 
-    <div class="row">
-        <div class="col-sm-3 col-lg-3"><!-- Костыль в виде отступа --></div>
-        <div class="col-sm-9 col-lg-9"></div>
-    </div>
-
-    <div class="row castom">
+    <div class="row flex-xl-nowrap pt-4">
 
 <!--                Меню-->
         <div th:replace="/block/menu :: menuUser"></div>
 
 
 <!--            Основной контейнер-->
-        <div class="col-sm-9">
+        <div class="col-12 col-md-9 col-xl-10 py-md-3 pl-md-5 bd-content">
             Основной контейнер
             <p></p>
             <th:block th:each="m : ${msg}">
@@ -32,8 +24,9 @@
 
 <!--    Подвал-->
     <div th:replace="/block/footer :: footer"></div>
-    <th:block th:replace="/block/footer :: script"></th:block>
-
 </div>
+
+<th:block th:replace="/block/footer :: script"></th:block>
+
 </body>
 </html>

@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-    <div class="col-sm-3" th:fragment="menuAdmin">
-        <ul class="nav">
-            <li class="nav-header">Главные ссылки</li>
-            <li class="active"><a href="/">Главная</a></li>
-            <li><a href="/admin/users">Пользователи</a></li>
-            <li><a href="/admin/roles">Роли и права</a></li>
-            <li class="nav-header">Дополнительные</li>
-            <li><a href="/users">Профиль</a></li>
-        </ul>
+    <div class="col-12 col-md-3 col-xl-2 bd-sidebar px-0" th:fragment="menuAdmin">
+<!--        <ul class="nav">-->
+<!--            <li class="nav-header">Главные ссылки</li>-->
+<!--            <li class="active"><a href="/">Главная</a></li>-->
+<!--            <li><a href="/admin/users">Пользователи</a></li>-->
+<!--            <li><a href="/admin/roles">Роли и права</a></li>-->
+<!--            <li class="nav-header">Дополнительные</li>-->
+<!--            <li><a href="/users">Профиль</a></li>-->
+<!--        </ul>-->
+        <div class="list-group" id="myList" role="tablist">
+            <a class="list-group-item list-group-item-action active border-0" href="/admin" role="tab">Admin</a>
+            <a class="list-group-item list-group-item-action border-0" href="/users" role="tab">User</a>
+        </div>
     </div>
 
-    <div class="col-sm-3" th:fragment="menuUser">
-        <ul class="nav">
-            <li class="nav-header">Главные ссылки</li>
-            <li class="active"><a href="/">Главная</a></li>
-            <li><a href="/users">Профиль</a></li>
-        </ul>
+    <div class="col-12 col-md-3 col-xl-2 bd-sidebar px-0" th:fragment="menuUser">
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action border-0" href="/">Главная</a>
+            <a class="list-group-item list-group-item-action active border-0" href="/users">Профиль</a>
+        </div>
+<!--        <div class="list-group" id="myList" role="tablist">-->
+<!--            <a class="list-group-item list-group-item-action active border-0" data-toggle="list" href="/admin" role="tab">Admin</a>-->
+<!--            <a class="list-group-item list-group-item-action border-0" data-toggle="list" href="/users" role="tab">User</a>-->
+<!--        </div>-->
     </div>
 
 </html>
