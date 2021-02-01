@@ -1,6 +1,7 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -108,34 +109,35 @@ public class AdminController {
     //=============User=============
 
     @GetMapping("/users")
-    public String getAllUsers(Model model, Principal principal) {
+    public String getAllUsers(@ModelAttribute("user") User user, Model model, Authentication authentication) {
         //Получим список пользователей и передадим в представление
         model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("userinfo", principal);
+        model.addAttribute("userinfo", authentication);
         return "admin/index";
     }
 
     @GetMapping("/users/{id}")
-    public String getCurrentUser(@PathVariable("id") int id, Model model, Principal principal) {
+    public String getCurrentUser(@PathVariable("id") int id, Model model, Authentication authentication) {
         //Получим одного пользователя по id и передадим на представление
         model.addAttribute("user", userService.getCurrentUser(id));
-        model.addAttribute("userinfo", principal);
+        model.addAttribute("userinfo", authentication);
         return "admin/info_user";
     }
 
-    @GetMapping("/users/new-user")
-    public String createUserForm(@ModelAttribute("user") User user, Model model, Principal principal) {
-        //Вернет html форму для создания нового пользователя
-        model.addAttribute("userinfo", principal);
-        return "admin/create_user";
-    }
+    //перенес
+//    @GetMapping("/users/new-user")
+//    public String createUserForm(@ModelAttribute("user") User user, Model model, Authentication authentication) {
+//        //Вернет html форму для создания нового пользователя
+//        model.addAttribute("userinfo", authentication);
+//        return "admin/create_user";
+//    }
 
     @GetMapping("/users/{id}/edit")
-    public String editUser (Model model,@PathVariable("id") int id, Principal principal){
+    public String editUser (Model model,@PathVariable("id") int id, Authentication authentication){
         //Вернет html форму для редактирования страницы пользователя
         model.addAttribute("user", userService.getCurrentUser(id));
         model.addAttribute("roles", roleService.getAllRole());
-        model.addAttribute("userinfo", principal);
+        model.addAttribute("userinfo", authentication);
         return "admin/edit_user";
     }
 

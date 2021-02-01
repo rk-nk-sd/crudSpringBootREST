@@ -6,10 +6,6 @@
 
 <div class="container-fluid">
 
-    <div class="row">
-        <div class="col-sm-3 col-lg-3"><!-- <h1>Список пользователей</h1> --></div>
-        <div class="col-sm-9 col-lg-9"><a href="/admin/users/new-user" class="c">Добавить нового пользователя</a></div>
-    </div>
     <div class="row castom">
 
 <!--                Меню-->
@@ -17,34 +13,93 @@
 
 <!--            Основной контейнер-->
         <div class="col-sm-9">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Логин</th>
-                    <th scope="col">Пароль</th>
-                    <th scope="col">Роль</th>
-                </tr>
-                </thead>
-                <tbody>
-                <th:block th:each="user : ${users}">
-                    <!-- Не работает onclick -->
-<!--                    <a href="/admin/users/{id}(id=${user.getId()})">-->
-                    <tr th:onclick="|loadContent('/admin/users/{id}(id=${user.getId()})}')|" onclick="window.location.href='/admin/users/{id}(id=${user.getId()})'">
-                        <th scope="row"><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getId()}"></a></th>
-                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getEmail()}"></a></td>
-                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getPassword()}"></a></td>
-                        <td>
-                            <th:block th:each="role : ${user.roles}">
-                                <a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${role.getName()}"></a>
-<!--                                <th:block th:text="${role.getName()}"></th:block>-->
-                            </th:block>
-                        </td>
-                    </tr>
-<!--                    </a>-->
-                </th:block>
-                </tbody>
-            </table>
+            <h1>Admin panel</h1>
+            <div class="row">
+                <div class="col">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="list-table-list" data-toggle="list" href="#list-users-table">Users table</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="list-form-list" data-toggle="list" href="#list-new-user">New user</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="tab-content" id="nav-tabContent">
+<!--                        USERS TABLE-->
+                        <div class="tab-pane fade show active" id="list-users-table" role="tabpanel" aria-labelledby="list-table-list">
+                            <h4 class="m-3">Все пользователи</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Имя</th>
+                                    <th scope="col">Фамилия</th>
+                                    <th scope="col">Возраст</th>
+                                    <th scope="col">Email</th>
+                                    <!--                    <th scope="col">Пароль</th>-->
+                                    <th scope="col">Роль</th>
+                                    <th scope="col">Редактировать</th>
+                                    <th scope="col">Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <th:block th:each="user : ${users}">
+                                    <tr th:onclick="|loadContent('/admin/users/{id}(id=${user.getId()})}')|" onclick="window.location.href='/admin/users/{id}(id=${user.getId()})'">
+                                        <th scope="row"><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getId()}"></a></th>
+                                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getFirstName()}"></a></td>
+                                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getLastName()}"></a></td>
+                                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getAge()}"></a></td>
+                                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getEmail()}"></a></td>
+                                        <!--                        <td><a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getPassword()}"></a></td>-->
+                                        <td>
+                                            <th:block th:each="role : ${user.getRoles()}">
+                                                <a th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${role.getName()}"></a>
+                                            </th:block>
+                                        </td>
+                                        <td><a class="btn btn-info" th:href="@{/admin/users/{id}/edit(id=${user.getId()})}" th:text="Изменить"></a></td>
+                                        <td>
+                                            <form th:method="delete" actions="/admin/users/${user.getId()}">
+                                                <input class="btn btn-danger" type="submit" value="Удалить"/>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+
+<!--                        FORM ADD NEW USER-->
+                        <div class="tab-pane fade" id="list-new-user" role="tabpanel" aria-labelledby="list-form-list">
+                            <h4 class="m-3">Добавить нового пользователя</h4>
+                            <div class="mx-auto">
+                                <form th:method="post" th:action="@{/admin/users}" th:object="${user}">
+
+                                    Введите адрес эл. почты:
+                                    </p>
+                                    <input type="email" name="email" required/>
+                                    <div th:if="${#fields.hasErrors('email')}"></div>
+                                    </p>
+
+                                    Введите пароль:
+                                    </p>
+                                    <input type="password" name="password" required/>
+                                    <div  th:if="${#fields.hasErrors('password')}"></div>
+                                    </p>
+
+                                    <input class="btn btn-success" type="submit" value="Создать пользователя" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 
