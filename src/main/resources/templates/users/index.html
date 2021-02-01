@@ -14,11 +14,38 @@
 
 <!--            Основной контейнер-->
         <div class="col-12 col-md-9 col-xl-10 py-md-3 pl-md-5 bd-content">
-            Основной контейнер
-            <p></p>
-            <th:block th:each="m : ${msg}">
-                <th:block th:text="${m}"></th:block>
-            </th:block>
+<!--            Основной контейнер-->
+<!--            <p></p>-->
+<!--            <th:block th:each="m : ${msg}">-->
+<!--                <th:block th:text="${m}"></th:block>-->
+<!--            </th:block>-->
+            <h4  class="list-group-item  border-0" style="background-color: #f7f7f7">User information-page</h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Возраст</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Роль</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row"  th:text="${user.getId()}"></th>
+                        <td  th:text="${user.getFirstName()}"></td>
+                        <td  th:text="${user.getLastName()}"></td>
+                        <td  th:text="${user.getAge()}"></td>
+                        <td th:text="${user.getEmail()}"></td>
+                        <td>
+                            <th:block th:each="role : ${user.getRoles()}">
+                                <th:block th:text="${role.getName()}"></th:block>
+                            </th:block>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

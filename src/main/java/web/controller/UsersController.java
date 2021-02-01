@@ -1,6 +1,8 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +22,10 @@ public class UsersController {
     }
 
     @GetMapping()
-    public String profile(Model model, Principal principal) {
+    public String profile(Model model, Authentication authentication) {
         //Получим список пользователей и передадим в представление
-        String massage = "Личная информация...";
-        model.addAttribute("msg", massage);
-        model.addAttribute("userinfo", principal);
+        model.addAttribute("userinfo", authentication);
+        model.addAttribute("user", userService.findByUserEmail(authentication.getName()));
         return "users/index";
     }
 }
