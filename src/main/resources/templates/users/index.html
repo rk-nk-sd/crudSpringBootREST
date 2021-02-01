@@ -9,16 +9,13 @@
     <div class="row flex-xl-nowrap pt-4">
 
 <!--                Меню-->
-        <div th:replace="/block/menu :: menuUser"></div>
+<!--        <th:block th:text="${menu.toString()}"></th:block>-->
+        <div th:replace="/block/menu :: ${menu.toString()}"></div>
 
 
 <!--            Основной контейнер-->
         <div class="col-12 col-md-9 col-xl-10 py-md-3 pl-md-5 bd-content">
-<!--            Основной контейнер-->
-<!--            <p></p>-->
-<!--            <th:block th:each="m : ${msg}">-->
-<!--                <th:block th:text="${m}"></th:block>-->
-<!--            </th:block>-->
+
             <h4  class="list-group-item  border-0" style="background-color: #f7f7f7">User information-page</h4>
             <table class="table table-hover">
                 <thead>
