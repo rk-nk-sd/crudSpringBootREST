@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
@@ -112,6 +113,7 @@ public class AdminController {
     public String getAllUsers(@ModelAttribute("user") User user, Model model, Authentication authentication) {
         //Получим список пользователей и передадим в представление
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getAllRole());
         model.addAttribute("userinfo", authentication);
         return "admin/index";
     }
@@ -144,14 +146,24 @@ public class AdminController {
     @PostMapping("/users")
     public String createUser (@ModelAttribute("user") @Valid User user,
                               BindingResult bindingResult,
+                              @RequestParam(name = "name") String name,
+                              @RequestParam(name = "lastname") String lastname,
+                              @RequestParam(name = "age") String age,
                               @RequestParam(name = "email") String email,
-                              @RequestParam(name = "password") String password){
+                              @RequestParam(name = "password") String password,
+                              @RequestParam(name = "addrole") String[] role){
         if(bindingResult.hasErrors())
             return "admin/create_user";
 
         Set<Role> roles = new HashSet<>();
-        roles.add(userService.findByRoleName("ROLE_USER"));
+//        roles.add(userService.findByRoleName("ROLE_USER"));
+        for (String variable : role) {
+            roles.add(userService.findByRoleName(variable));
+        }
 
+        user.setFirstName(name);
+        user.setLastName(lastname);
+        user.setAge(Integer.valueOf(age).intValue());
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setRoles(roles);

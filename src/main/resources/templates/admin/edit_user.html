@@ -18,15 +18,14 @@
 <!--            Основной контейнер-->
         <div class="col-sm-9">
             <form th:method="patch" th:action="@{/admin/users/{id}(id = ${user.id})}" th:object="${user}">
-<!--                <input type="hidden" name="_method" value="patch"/>-->
 
                 ID: <th:block th:text="${user.getId()}"></th:block>
                 </p>
 
-<!--                Edit first name:-->
-<!--                <input type="text" name="firstname" th:value="${user.getFirstName()}" required/>-->
+                Edit first name:
+                <input type="text" name="firstname" th:value="${user.getFirstName()}" required/>
 <!--                <div th:if="${#fields.hasErrors('firstname')}"></div>-->
-<!--                </p>-->
+                </p>
 
                 Edit user e-mail:
                 <input type="email" name="email" th:value="${user.getEmail()}" required/>
