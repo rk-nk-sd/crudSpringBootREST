@@ -30,7 +30,7 @@ public class UsersController {
             UserDetails details = userDetailsService.loadUserByUsername(authentication.getName());
             if (details != null && details.getAuthorities().stream()
                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                model.addAttribute("menu", "menuAdmin");
+                model.addAttribute("menu", "menuAdminProfile");
             } else {
                 model.addAttribute("menu", "menuUser");
             }
