@@ -60,7 +60,7 @@
                                         <!--                        <td th:text="${user.getPassword()}"></td>-->
                                         <td>
                                             <th:block th:each="role : ${user.getRoles()}">
-                                                <th:block th:text="${role.getName()}"></th:block>
+                                                <th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block>
                                             </th:block>
                                         </td>
                                         <td>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="/block/head :: head"></head>
 <body>
     <header th:replace="/block/header :: header"></header>
@@ -9,12 +9,24 @@
     <div class="row flex-xl-nowrap pt-4">
 
 <!--                Меню-->
-<!--        <th:block th:text="${menu.toString()}"></th:block>-->
         <div th:replace="/block/menu :: ${menu.toString()}"></div>
 
 
 <!--            Основной контейнер-->
         <div class="col-12 col-md-9 col-xl-10 py-md-3 pl-md-5 bd-content">
+
+<!--            <span sec:authentication="principal.authorities"></span>-->
+
+<!--            <div class="row" sec:authorize="hasRole('ROLE_USER')">-->
+<!--                <h2>This will only be displayed if authenticated user has role ROLE_USER.</h2>-->
+<!--            </div>-->
+
+<!--            <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">-->
+<!--                This will only be displayed if authenticated user has role ROLE_ADMIN.-->
+<!--            </div>-->
+
+
+
 
             <h4  class="list-group-item  border-0" style="background-color: #f7f7f7">User information-page</h4>
             <table class="table table-hover">

@@ -14,7 +14,8 @@
         <div class="navbar-brand mb-0 h1">
             <th:block th:text="${userinfo.getName()}"></th:block> with roles:
             <th:block th:each="role : ${userinfo.getAuthorities()}">
-                <th:block th:text="${role.authority}"></th:block>
+                <th:block th:text="${#strings.substringAfter(role.authority,'ROLE_')}"></th:block>
+<!--                <p th:text="${#strings.substringAfter(role.authority,'ROLE_')}"></p>-->
             </th:block>
         </div>
         <div th:replace="/block/header :: logout"></div>
