@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<!--    MODAL BLOCK EDIT USER-->
+    <div class="modal-content" th:fragment="modalEditUserForm">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form th:method="patch" th:action="@{/admin/users/{id}(id = ${user.getId()})}" th:object="${user}">
+            <div th:replace="/block/forms :: modalContentEditUserForm"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input class="btn btn-primary" type="submit" value="Save"/>
+            </div>
+        </form>
+    </div>
+
+    <!--    MODAL BLOCK DELETE USER-->
+    <div class="modal-content" th:fragment="modalDeleteUserForm">
+        <div class="modal-header">
+            <h5 class="modal-title" id="userDeleteModalLabel">Delete user</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form th:method="delete" th:action="@{/admin/users/{id}(id = ${user.getId()})}">
+            <div th:replace="/block/forms :: modalContentDeleteUserForm"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input class="btn btn-danger" type="submit" value="Удалить"/>
+            </div>
+        </form>
+    </div>
+
+    <!--    CONTENT FOR MODAL EDIT-->
+    <div class="modal-body text-center" th:fragment="modalContentEditUserForm">
+
+        ID:
+        </p>
+        <input type="text"  name="name" th:value="${user.getId()}" readonly/>
+        </p>
+
+        Имя:
+        </p>
+        <input type="text" name="firstname" th:value="${user.getFirstName()}" required/>
+        <!--                                    <div th:if="${#fields.hasErrors('name')}"></div>-->
+        </p>
+
+        Фамилия:
+        </p>
+        <input type="text" name="lastname" th:value="${user.getLastName()}" required/>
+        <!--                                    <div th:if="${#fields.hasErrors('lastname')}"></div>-->
+        </p>
+
+        Возраст:
+        </p>
+        <input type="number" step="1" name="age" th:value="${user.getAge()}" required/>
+        <!--                                    <div th:if="${#fields.hasErrors('age')}"></div>-->
+        </p>
+
+        E-mail:
+        </p>
+        <input type="email" name="email" th:value="${user.getEmail()}" required/>
+        <!--        <div th:if="${#fields.hasErrors('email')}"></div>-->
+        </p>
+
+        Пароль:
+        </p>
+        <input type="password" name="password" required/>
+        <!--        <div  th:if="${#fields.hasErrors('password')}"></div>-->
+        </p>
+
+        Роль:
+        <p><select multiple size="3" name="addrole" required>
+            <th:block th:each="role : ${roles}">
+
+                <th:block th:each="roleUser : ${user.getRoles()}">
+
+                    <th:block th:if="${role.getName() eq roleUser.getName()}">
+                        <option selected th:value="${role.getName()}"><th:block th:text="${role.getName()}"></th:block></option>
+                    </th:block>
+
+                    <th:block th:if="not ${role.getName() eq roleUser.getName()}">
+                        <option th:value="${role.getName()}"><th:block th:text="${role.getName()}"></th:block></option>
+                    </th:block>
+
+                </th:block>
+
+            </th:block>
+        </select></p>
+
+    </div>
+
+    <!--    CONTENT FOR MODAL DELETE-->
+    <div class="modal-body text-center" th:fragment="modalContentDeleteUserForm">
+
+        ID:
+        </p>
+        <input type="text"  name="name" th:value="${user.getId()}" readonly/>
+        </p>
+
+        Имя:
+        </p>
+        <input type="text" name="name" th:value="${user.getFirstName()}" readonly/>
+        <!--                                    <div th:if="${#fields.hasErrors('name')}"></div>-->
+        </p>
+
+        Фамилия:
+        </p>
+        <input type="text" name="lastname" th:value="${user.getLastName()}" readonly/>
+        <!--                                    <div th:if="${#fields.hasErrors('lastname')}"></div>-->
+        </p>
+
+        Возраст:
+        </p>
+        <input type="number" name="age" th:value="${user.getAge()}" readonly/>
+        <!--                                    <div th:if="${#fields.hasErrors('age')}"></div>-->
+        </p>
+
+        E-mail:
+        </p>
+        <input type="email" name="email" th:value="${user.getEmail()}" readonly/>
+        <!--        <div th:if="${#fields.hasErrors('email')}"></div>-->
+        </p>
+
+        Роль:
+        <p><select multiple size="3" name="addrole" readonly>
+            <th:block th:each="role : ${user.getRoles()}">
+                <option th:value="${role.getName()}"><th:block th:text="${role.getName()}"></th:block></option>
+            </th:block>
+        </select></p>
+
+    </div>
+</html>

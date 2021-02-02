@@ -176,13 +176,15 @@ public class AdminController {
     public String update (@ModelAttribute("user") @Valid User user,
                           BindingResult bindingResult,
                           @PathVariable("id") int id,
-//                          @RequestParam(name = "firstname") String firstname,
+                          @RequestParam(name = "firstname") String firstname,
+                          @RequestParam(name = "lastname") String lastname,
+                          @RequestParam(name = "age") String age,
                           @RequestParam(name = "email") String email,
                           @RequestParam(name = "password") String password,
                           @RequestParam(name = "addrole") String[] role){
         //Обновляет пользователя
         if(bindingResult.hasErrors())
-            return "admin/edit_user";
+            return "admin/index";
 
         Set<Role> roles = new HashSet<>();
 //        Set<Role> roles = user.getRoles();
@@ -194,7 +196,9 @@ public class AdminController {
 //        roles.add(userService.findByRoleName(role));
 //        roles.add(userService.findByRoleName("ROLE_USER"));
 
-//        user.setFirstName(firstname);
+        user.setFirstName(firstname);
+        user.setLastName(lastname);
+        user.setAge(Integer.valueOf(age).intValue());
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setRoles(roles);
