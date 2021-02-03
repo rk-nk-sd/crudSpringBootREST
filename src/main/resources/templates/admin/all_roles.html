@@ -6,33 +6,94 @@
 
 <div class="container-fluid">
 
-    <div class="row">
-        <div class="col-sm-3 col-lg-3"><!-- <h1>Список пользователей</h1> --></div>
-        <div class="col-sm-9 col-lg-9"><a href="/admin/roles/new-role" class="c">Добавить новую роль</a></div>
-    </div>
-    <div class="row castom">
+    <div class="row flex-xl-nowrap pt-4">
 
 <!--                Меню-->
         <div th:replace="/block/menu :: menuAdmin"></div>
 
 <!--            Основной контейнер-->
         <div class="col-sm-9">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Роль</th>
-                </tr>
-                </thead>
-                <tbody>
-                <th:block th:each="role : ${roles}">
-                    <tr>
-                        <th scope="row"><a th:href="@{/admin/roles/{id}(id=${role.getId()})}" th:text="${role.getId()}"></a></th>
-                        <td><a th:href="@{/admin/roles/{id}(id=${role.getId()})}" th:text="${role.getName()}"></a></td>
-                    </tr>
-                </th:block>
-                </tbody>
-            </table>
+
+            <h1>Admin panel</h1>
+            <div class="row">
+                <div class="col">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="list-table-list" data-toggle="list" href="#list-users-table">Role table</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="list-form-role" data-toggle="list" href="#list-new-role">New role</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="tab-content" id="nav-tabContent">
+                        <!--                        USERS TABLE-->
+                        <div class="tab-pane fade show active" id="list-users-table" role="tabpanel" aria-labelledby="list-table-list">
+                            <h4  class="list-group-item  border-0" style="background-color: #f7f7f7">Все роли</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Роль</th>
+                                    <th scope="col">Редактировать</th>
+                                    <th scope="col">Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <th:block th:each="role : ${roles}">
+                                    <tr>
+                                        <th scope="row" th:text="${role.getId()}"></th>
+                                        <td th:text="${role.getName()}"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-edit" th:attr="data-target='#edit_'+${role.getId()}" th:text="Изменить"></button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" th:id="edit_+${role.getId()}" tabindex="-1" role="dialog" aria-labelledby="roleEditModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div th:replace="/block/forms :: modalEditRoleForm"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-delete" th:attr="data-target='#delete_'+${role.getId()}" th:text="Удалить"></button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" th:id="delete_+${role.getId()}" tabindex="-1" role="dialog" aria-labelledby="roleDeleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div th:replace="/block/forms :: modalDeleteRoleForm"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--                        FORM ADD NEW ROLE-->
+                        <div class="tab-pane fade" id="list-new-role" role="tabpanel" aria-labelledby="list-form-role">
+                            <h4 class="list-group-item  border-0" style="background-color: #f7f7f7">Добавить новую роль</h4>
+                            <div class="text-center">
+                                <form th:method="post" th:action="@{/admin/roles}" th:object="${role}">
+
+                                    Введите название новой роли:
+                                    </p>
+                                    <input type="text" name="rolename" required/>
+                                    <!--                <p th:if="${#fields.hasErrors('rolename')}"></p>-->
+                                    </p>
+
+                                    <input class="btn btn-success" type="submit" value="Создать" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

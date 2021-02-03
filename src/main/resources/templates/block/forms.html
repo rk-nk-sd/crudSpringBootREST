@@ -18,6 +18,23 @@
         </form>
     </div>
 
+    <!--    MODAL BLOCK EDIT ROLE-->
+    <div class="modal-content" th:fragment="modalEditRoleForm">
+        <div class="modal-header">
+            <h5 class="modal-title" id="roleEditModalLabel">Edit role</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form th:method="patch" th:action="@{/admin/roles/{id}(id=${role.getId()})}">
+            <div th:replace="/block/forms :: modalContentEditRoleForm"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input class="btn btn-primary" type="submit" value="Save"/>
+            </div>
+        </form>
+    </div>
+
     <!--    MODAL BLOCK DELETE USER-->
     <div class="modal-content" th:fragment="modalDeleteUserForm">
         <div class="modal-header">
@@ -35,7 +52,24 @@
         </form>
     </div>
 
-    <!--    CONTENT FOR MODAL EDIT-->
+    <!--    MODAL BLOCK DELETE ROLE-->
+    <div class="modal-content" th:fragment="modalDeleteRoleForm">
+        <div class="modal-header">
+            <h5 class="modal-title" id="roleDeleteModalLabel">Delete role</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form th:method="delete" th:action="@{/admin/roles/{id}(id = ${role.getId()})}">
+            <div th:replace="/block/forms :: modalContentDeleteRoleForm"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input class="btn btn-danger" type="submit" value="Удалить"/>
+            </div>
+        </form>
+    </div>
+
+    <!--    CONTENT FOR MODAL EDIT USER-->
     <div class="modal-body text-center" th:fragment="modalContentEditUserForm">
 
         ID:
@@ -94,7 +128,23 @@
 
     </div>
 
-    <!--    CONTENT FOR MODAL DELETE-->
+    <!--    CONTENT FOR MODAL EDIT ROLE-->
+    <div class="modal-body text-center" th:fragment="modalContentEditRoleForm">
+
+        ID:
+        </p>
+        <input type="text"  name="name" th:value="${role.getId()}" readonly/>
+        </p>
+
+        Роль:
+        </p>
+        <input type="text" name="rolename" th:value="${role.getName()}" required/>
+        <!--                                    <div th:if="${#fields.hasErrors('name')}"></div>-->
+        </p>
+
+    </div>
+
+    <!--    CONTENT FOR MODAL DELETE USER-->
     <div class="modal-body text-center" th:fragment="modalContentDeleteUserForm">
 
         ID:
@@ -132,6 +182,22 @@
                 <option th:value="${role.getName()}"><th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block></option>
             </th:block>
         </select></p>
+
+    </div>
+
+    <!--    CONTENT FOR MODAL DELETE ROLE-->
+    <div class="modal-body text-center" th:fragment="modalContentDeleteRoleForm">
+
+        ID:
+        </p>
+        <input type="text"  name="name" th:value="${role.getId()}" readonly/>
+        </p>
+
+        Имя:
+        </p>
+        <input type="text" name="name" th:value="${role.getName()}" readonly/>
+        <!--                                    <div th:if="${#fields.hasErrors('name')}"></div>-->
+        </p>
 
     </div>
 </html>

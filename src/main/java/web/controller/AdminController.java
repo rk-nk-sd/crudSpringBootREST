@@ -175,6 +175,7 @@ public class AdminController {
     @PatchMapping("/users/{id}")
     public String update (@ModelAttribute("user") @Valid User user,
                           BindingResult bindingResult,
+                          Model model,
                           @PathVariable("id") int id,
                           @RequestParam(name = "firstname") String firstname,
                           @RequestParam(name = "lastname") String lastname,
