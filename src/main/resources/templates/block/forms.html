@@ -108,23 +108,26 @@
         </p>
 
         Роль:
-        <p><select multiple size="3" name="addrole" required>
+        <p><select th:id="${user.getId()}" multiple size="3" name="addrole" required>
             <th:block th:each="role : ${roles}">
 
-                <th:block th:each="roleUser : ${user.getRoles()}">
-
-                    <th:block th:if="${role.getName() eq roleUser.getName()}">
-                        <option selected th:value="${role.getName()}"><th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block></option>
-                    </th:block>
-
-                    <th:block th:if="not ${role.getName() eq roleUser.getName()}">
-                        <option th:value="${role.getName()}"><th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block></option>
-                    </th:block>
-
-                </th:block>
+                <option th:value="${role.getName()}"><th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block></option>
 
             </th:block>
         </select></p>
+
+        <th:block th:each="roleUser : ${user.getRoles()}">
+
+            <script  th:inline="javascript">
+
+                $idVar = [[${user.getId()}]];
+                $myVar = [[${roleUser.getName()}]];
+
+                $('select#'+$idVar+' option[value = '+$myVar+']').prop('selected', true);
+
+            </script>
+
+        </th:block>
 
     </div>
 
