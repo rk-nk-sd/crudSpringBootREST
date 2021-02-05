@@ -1,15 +1,12 @@
 package web.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-//@Data
-//@NoArgsConstructor
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
 
@@ -18,6 +15,7 @@ public class Role implements GrantedAuthority {
     private Long id;
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     Set<User> users;
 

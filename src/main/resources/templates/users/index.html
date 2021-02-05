@@ -9,7 +9,7 @@
     <div class="row flex-xl-nowrap pt-4">
 
 <!--                Меню-->
-        <div th:replace="/block/menu :: ${menu.toString()}"></div>
+<!--        <div th:replace="/block/menu :: ${menu.toString()}"></div>-->
 
 
 <!--            Основной контейнер-->
@@ -42,16 +42,16 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"  th:text="${user.getId()}"></th>
-                        <td  th:text="${user.getFirstName()}"></td>
-                        <td  th:text="${user.getLastName()}"></td>
-                        <td  th:text="${user.getAge()}"></td>
-                        <td th:text="${user.getEmail()}"></td>
-                        <td>
-                            <th:block th:each="role : ${user.getRoles()}">
-                                <th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block>
-                            </th:block>
-                        </td>
+<!--                        <th scope="row"  th:text="${user.getId()}"></th>-->
+<!--                        <td  th:text="${user.getFirstName()}"></td>-->
+<!--                        <td  th:text="${user.getLastName()}"></td>-->
+<!--                        <td  th:text="${user.getAge()}"></td>-->
+<!--                        <td th:text="${user.getEmail()}"></td>-->
+<!--                        <td>-->
+<!--                            <th:block th:each="role : ${user.getRoles()}">-->
+<!--                                <th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block>-->
+<!--                            </th:block>-->
+<!--                        </td>-->
                     </tr>
                 </tbody>
             </table>
@@ -59,10 +59,10 @@
     </div>
 
 <!--    Подвал-->
-    <div th:replace="/block/footer :: footer"></div>
+<!--    <div th:replace="/block/footer :: footer"></div>-->
 </div>
 
-<th:block th:replace="/block/footer :: script"></th:block>
+<!--<th:block th:replace="/block/footer :: script"></th:block>-->
 
 </body>
 </html>
