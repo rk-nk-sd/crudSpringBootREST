@@ -91,12 +91,13 @@ public class RestController {
     }
 
     //=============User=============
-    @GetMapping("/users/whoami")
+
+    @GetMapping("/users/whoAmI")
     public ResponseEntity<Authentication> whoAmI(Authentication authentication) {
         return ResponseEntity.ok(authentication);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/users/getAllUsers")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
