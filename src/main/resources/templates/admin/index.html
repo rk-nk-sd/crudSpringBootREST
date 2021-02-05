@@ -9,140 +9,26 @@
     <div class="row flex-xl-nowrap pt-4">
 
 <!--                Меню-->
-<!--        <div th:replace="/block/menu :: menuAdmin"></div>-->
+        <div th:replace="/block/menu :: menuAdminNew"></div>
 
 <!--            Основной контейнер-->
-        <div class="col-sm-9">
-            <h1>Admin panel</h1>
-            <div class="row">
-                <div class="col">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="list-table-list" data-toggle="list" href="#list-users-table">Users table</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="list-form-list" data-toggle="list" href="#list-new-user">New user</a>
-                        </li>
-                    </ul>
+        <div class="tab-content col-sm-9" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-admin" role="tabpanel" aria-labelledby="v-pills-admin-tab">
+
+                <div class="form-group">
+
+                    <div th:replace="/block/adminContent :: adminPage"></div>
+
                 </div>
+
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="tab-content" id="nav-tabContent">
-<!--                        USERS TABLE-->
-                        <div class="tab-pane fade show active" id="list-users-table" role="tabpanel" aria-labelledby="list-table-list">
-                            <h4  class="list-group-item  border-0" style="background-color: #f7f7f7">Все пользователи</h4>
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Имя</th>
-                                    <th scope="col">Фамилия</th>
-                                    <th scope="col">Возраст</th>
-                                    <th scope="col">Email</th>
-                                    <!--                    <th scope="col">Пароль</th>-->
-                                    <th scope="col">Роль</th>
-                                    <th scope="col">Редактировать</th>
-                                    <th scope="col">Удалить</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-<!--                                <th:block th:each="user : ${users}">-->
-<!--                                    <tr>-->
-<!--                                        <th scope="row"  th:text="${user.getId()}"></th>-->
-<!--                                        <td  th:text="${user.getFirstName()}"></td>-->
-<!--                                        <td  th:text="${user.getLastName()}"></td>-->
-<!--                                        <td  th:text="${user.getAge()}"></td>-->
-<!--                                        <td th:text="${user.getEmail()}"></td>-->
-<!--                                        &lt;!&ndash;                        <td th:text="${user.getPassword()}"></td>&ndash;&gt;-->
-<!--                                        <td>-->
-<!--                                            <th:block th:each="role : ${user.getRoles()}">-->
-<!--                                                <th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block>-->
-<!--                                            </th:block>-->
-<!--                                        </td>-->
-<!--                                        <td>-->
-<!--                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-edit" th:attr="data-target='#edit_'+${user.getId()}" th:text="Изменить"></button>-->
+            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
 
-<!--                                            &lt;!&ndash; Modal &ndash;&gt;-->
-<!--                                            <div class="modal fade" th:id="edit_+${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--                                                <div class="modal-dialog" role="document">-->
-<!--                                                    <div th:replace="/block/forms :: modalEditUserForm"></div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </td>-->
-<!--                                        <td>-->
-<!--                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-delete" th:attr="data-target='#delete_'+${user.getId()}" th:text="Удалить"></button>-->
+                <div th:replace="/block/userContent :: profilePage"></div>
 
-<!--                                            &lt;!&ndash; Modal &ndash;&gt;-->
-<!--                                            <div class="modal fade" th:id="delete_+${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="userDeleteModalLabel" aria-hidden="true">-->
-<!--                                                <div class="modal-dialog" role="document">-->
-<!--                                                    <div th:replace="/block/forms :: modalDeleteUserForm"></div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </td>-->
-
-<!--                                    </tr>-->
-
-<!--                                </th:block>-->
-                                </tbody>
-                            </table>
-                        </div>
-
-<!--                        FORM ADD NEW USER-->
-                        <div class="tab-pane fade" id="list-new-user" role="tabpanel" aria-labelledby="list-form-list">
-                            <h4 class="list-group-item  border-0" style="background-color: #f7f7f7">Добавить нового пользователя</h4>
-                            <div class="text-center">
-<!--                                <form th:method="post" th:action="@{/admin/users}" th:object="${user}">-->
-
-<!--                                    Введите имя:-->
-<!--                                    </p>-->
-<!--                                    <input type="text" name="name" required/>-->
-<!--&lt;!&ndash;                                    <div th:if="${#fields.hasErrors('name')}"></div>&ndash;&gt;-->
-<!--                                    </p>-->
-
-<!--                                    Введите фамилию:-->
-<!--                                    </p>-->
-<!--                                    <input type="text" name="lastname" required/>-->
-<!--&lt;!&ndash;                                    <div th:if="${#fields.hasErrors('lastname')}"></div>&ndash;&gt;-->
-<!--                                    </p>-->
-
-<!--                                    Введите возраст:-->
-<!--                                    </p>-->
-<!--                                    <input type="text" name="age" required/>-->
-<!--&lt;!&ndash;                                    <div th:if="${#fields.hasErrors('age')}"></div>&ndash;&gt;-->
-<!--                                    </p>-->
-
-<!--                                    Введите адрес эл. почты:-->
-<!--                                    </p>-->
-<!--                                    <input type="email" name="email" required/>-->
-<!--                                    <div th:if="${#fields.hasErrors('email')}"></div>-->
-<!--                                    </p>-->
-
-<!--                                    Введите пароль:-->
-<!--                                    </p>-->
-<!--                                    <input type="password" name="password" required/>-->
-<!--                                    <div  th:if="${#fields.hasErrors('password')}"></div>-->
-<!--                                    </p>-->
-
-<!--                                    Выберите роли:-->
-<!--                                    <p><select multiple size="3" name="addrole" required>-->
-<!--                                        <th:block th:each="role : ${roles}">-->
-<!--                                            <option th:value="${role.getName()}"><th:block th:text="${role.getName()}"></th:block></option>-->
-<!--                                        </th:block>-->
-<!--                                    </select></p>-->
-
-<!--                                    <input class="btn btn-success" type="submit" value="Создать пользователя" />-->
-<!--                                </form>-->
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
             </div>
-
-
-
         </div>
+
     </div>
 
     <!--    Подвал-->
