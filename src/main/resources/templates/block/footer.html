@@ -34,27 +34,184 @@
             //             }
             //         })
             // }
-            // function getAllUsers(jQuery) {
-            //     getAllUsersJson( jQuery )
-            //         .then(gau =>
+            function getAllUsers(jQuery) {
+                getAllUsersJson( jQuery )
+                    .then(gau =>
+                        document.getElementById('allUsersTable').innerHTML = gau.map(
+                            function (user) {
+                                return '<tr><th scope="row">' + user.id + '</th>'
+                                    + '<td>' + user.firstName + '</td>'
+                                    + '<td>' + user.lastName + '</td>'
+                                    + '<td>' + user.age + '</td>'
+                                    + '<td>' + user.email + '</td>'
+                                    + '<td>' + user.roles.map(
+                                        function (role) {
+                                            return " " + role.name.replace("ROLE_", "")
+                                        }) + '</td>'
+                                    + '<td>'
+                                        + '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#edit_' + user.id + '">Изменить</button>'
+
+                                        //<!-- Modal -->
+                                        + '<div class="modal fade" id="edit_' + user.id + '" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'
+                                        + '<div class="modal-dialog" role="document">'
+                                        // + '<div th:replace="/block/forms :: modalEditUserForm"></div>'
+                                        + buttonModalEdit(user)
+                                        + '</div>'
+                                        + '</div>'
+                                    + '</td>'
+
+                                    + '<td>'
+                                    + '<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_' + user.id + '">Удалить</button>'
+
+                                        //<!-- Modal -->
+                                    + '<div class="modal fade" id="delete_' + user.id + '" tabIndex="-1" role="dialog" aria-labelledby="userDeleteModalLabel" aria-hidden="true">'
+                                    + '<div class="modal-dialog" role="document">'
+                                    + buttonModalDelete(user)
+                                    + '</div>'
+                                    + '</div>'
+                                    + '</td>'
+                                    + '</tr>'
+                                // $('<tr>').append(
+                                //     $('<th>').text(user.id),
+                                //     // $('<td>').text(user.firstName),
+                                //     // $('<td>').text(user.lastName),
+                                //     // $('<td>').text(user.age),
+                                //     // $('<td>').text(user.email),
+                                //     // $('<td>').text(
+                                //     //     user.roles.map(
+                                //     //                 function (role) {
+                                //     //                     return " " + role.name.replace("ROLE_", "")
+                                //     //                 })
+                                //     // ),
+                                //     // $('<td>').text("Edit"),
+                                //     // $('<td>').text("Delete")
+                                //
+                                // ).appendChild('allUsersTable')
+                            }).join("")
+                    )}
+
+            function buttonModalEdit(user) {
+                return '<div class="modal-content">'
+                    + '<div class="modal-header">'
+                    +    '<h5 class="modal-title" id="exampleModalLabel">Edit user</h5>'
+                    +    '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+                    +        '<span aria-hidden="true">&times;</span>'
+                    +    '</button>'
+                    + '</div>'
+                    + '<form method="patch" action="/admin/users/' + user.id +  '">'
+                    +    modalEditContent(user)
+                    +    '<div class="modal-footer">'
+                    +        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>'
+                    +        '<input class="btn btn-primary" type="submit" value="Save"/>'
+                    +    '</div>'
+                    + '</form>'
+                    + '</div>'
+            }
+
+            function buttonModalDelete(user) {
+                return '<div class="modal-content">\n' +
+                    '        <div class="modal-header">\n' +
+                    '            <h5 class="modal-title" id="userDeleteModalLabel">Delete user</h5>\n' +
+                    '            <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+                    '                <span aria-hidden="true">&times;</span>\n' +
+                    '            </button>\n' +
+                    '        </div>\n' +
+                    '        <form method="delete" action="/admin/users/' + user.id + '">\n' +
+                    modalDeleteContent(user) +
+                    '            <div class="modal-footer">\n' +
+                    '                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
+                    '                <input class="btn btn-danger" type="submit" value="Удалить"/>\n' +
+                    '            </div>\n' +
+                    '        </form>\n' +
+                    '    </div>'
+            }
+
+            function buttonModalRoleEdit(role) {
+                return '<div class="modal-content">\n' +
+                    '        <div class="modal-header">\n' +
+                    '            <h5 class="modal-title" id="roleEditModalLabel">Edit role</h5>\n' +
+                    '            <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+                    '                <span aria-hidden="true">&times;</span>\n' +
+                    '            </button>\n' +
+                    '        </div>\n' +
+                    '        <form method="patch" action="/admin/roles/' + user.id + '">\n' +
+                    // '            <div th:replace="/block/forms :: modalContentEditRoleForm"></div>\n' +
+                    '            <div class="modal-footer">\n' +
+                    '                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
+                    '                <input class="btn btn-primary" type="submit" value="Save"/>\n' +
+                    '            </div>\n' +
+                    '        </form>\n' +
+                    '    </div>'
+            }
+
+            function modalEditContent(user) {
+                return '<div class="modal-body text-center">'
+
+                    + 'ID:<p></p>'
+                    + '<input type="text"  name="name" value="' + user.id + '" readonly/></p>'
+
+                    + 'Имя:</p>'
+                    + '<input type="text" name="firstname" value="' + user.firstName + '" required/></p>'
             //
-            //             document.getElementById('allUsersTable')
-            //                 .innerHTML = gau.map(
-            //                 function (user) {
-            //                     return '<tr><th scope="row">' + user.id + '</th>'
-            //                         + '<td>' + user.firstName + '</td>'
-            //                         + '<td>' + user.lastName + '</td>'
-            //                         + '<td>' + user.age + '</td>'
-            //                         + '<td>' + user.email + '</td>'
-            //                         + '<td>' + user.roles.map(
-            //                             function (role) {
-            //                             return " " + role.name.replace("ROLE_", "")
-            //                         }) + '</td>'
-            //                         + '<td>Edit</td>'
-            //                         + '<td>Delete</td>'
-            //                         + '</tr>'
-            //                 }).join("")
-            //         )}
+                    + 'Фамилия:</p>'
+                    + '<input type="text" name="lastname" value="' + user.lastName + '" required/></p>'
+            //
+                    + 'Возраст:</p>'
+                    + '<input type="number" step="1" name="age" value="' + user.age + '" required/></p>'
+            //
+                    + 'E-mail:</p>'
+                    + '<input type="email" name="email" value="' + user.email + '" required/></p>'
+            //
+                    + 'Пароль:</p>'
+                    + '<input type="password" name="password" required/></p>'
+
+                    + 'Роль:<p><select id="' + user.id + '" multiple size="3" name="addrole" required>'
+                        // <th:block th:each="role : ${roles}">
+                        //
+                        //     <option th:value="${role.getName()}"><th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block></option>
+                        //
+                        // </th:block>
+                    + ' </select></p>'
+                    + '</div>'
+            }
+
+            function modalDeleteContent(user) {
+                return '<div class="modal-body text-center">\n' +
+
+                    '        ID:\n' +
+                    '        </p>\n' +
+                    '        <input type="text"  name="name" value="' + user.id + '" readonly/>\n' +
+                    '        </p>\n' +
+
+                    '        Имя:\n' +
+                    '        </p>\n' +
+                    '        <input type="text" name="name" value="' + user.firstName + '" readonly/>\n' +
+                    '        </p>\n' +
+
+                    '        Фамилия:\n' +
+                    '        </p>\n' +
+                    '        <input type="text" name="lastname" value="' + user.lastName + '" readonly/>\n' +
+                    '        </p>\n' +
+
+                    '        Возраст:\n' +
+                    '        </p>\n' +
+                    '        <input type="number" name="age" value="' + user.age + '" readonly/>\n' +
+                    '        </p>\n' +
+
+                    '        E-mail:\n' +
+                    '        </p>\n' +
+                    '        <input type="email" name="email" value="' + user.email + '" readonly/>\n' +
+                    '        </p>\n' +
+
+                    '        Роль:\n' +
+                    '        <p><select multiple size="3" name="addrole" readonly>\n' +
+                                user.roles.map(
+                                    function (role) {
+                                        return '<option value="' + role.name + '">' + role.name.replace("ROLE_", "") + '</option>'
+                                    }) +
+                    '        </select></p>\n' +
+                    '    </div>'
+            }
 
             $( document ).ready( authUserInfo ).ready( getAllUsers );
         </script>

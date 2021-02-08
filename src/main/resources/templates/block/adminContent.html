@@ -36,43 +36,43 @@
                             </tr>
                             </thead>
                             <tbody id="allUsersTable">
-                            <!--                                <th:block th:each="user : ${users}">-->
+<!--                                                            <th:block th:each="user : ${users}">-->
 <!--                                                                <tr>-->
-                            <!--                                        <th scope="row"  th:text="${user.getId()}"></th>-->
-                            <!--                                        <td  th:text="${user.getFirstName()}"></td>-->
-                            <!--                                        <td  th:text="${user.getLastName()}"></td>-->
-                            <!--                                        <td  th:text="${user.getAge()}"></td>-->
-                            <!--                                        <td th:text="${user.getEmail()}"></td>-->
-                            <!--                                        &lt;!&ndash;                        <td th:text="${user.getPassword()}"></td>&ndash;&gt;-->
-                            <!--                                        <td>-->
-                            <!--                                            <th:block th:each="role : ${user.getRoles()}">-->
-                            <!--                                                <th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block>-->
-                            <!--                                            </th:block>-->
-                            <!--                                        </td>-->
-                            <!--                                        <td>-->
-                            <!--                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-edit" th:attr="data-target='#edit_'+${user.getId()}" th:text="Изменить"></button>-->
+<!--                                                                    <th scope="row"  th:text="${user.getId()}"></th>-->
+<!--                                                                    <td  th:text="${user.getFirstName()}"></td>-->
+<!--                                                                    <td  th:text="${user.getLastName()}"></td>-->
+<!--                                                                    <td  th:text="${user.getAge()}"></td>-->
+<!--                                                                    <td th:text="${user.getEmail()}"></td>-->
+<!--                                                                    &lt;!&ndash;                        <td th:text="${user.getPassword()}"></td>&ndash;&gt;-->
+<!--                                                                    <td>-->
+<!--                                                                        <th:block th:each="role : ${user.getRoles()}">-->
+<!--                                                                            <th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block>-->
+<!--                                                                        </th:block>-->
+<!--                                                                    </td>-->
+<!--                                                                    <td>-->
+<!--                                                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-edit" th:attr="data-target='#edit_'+${user.getId()}" th:text="Изменить"></button>-->
 
-                            <!--                                            &lt;!&ndash; Modal &ndash;&gt;-->
-                            <!--                                            <div class="modal fade" th:id="edit_+${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-                            <!--                                                <div class="modal-dialog" role="document">-->
-                            <!--                                                    <div th:replace="/block/forms :: modalEditUserForm"></div>-->
-                            <!--                                                </div>-->
-                            <!--                                            </div>-->
-                            <!--                                        </td>-->
-                            <!--                                        <td>-->
-                            <!--                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-delete" th:attr="data-target='#delete_'+${user.getId()}" th:text="Удалить"></button>-->
+<!--                                                                        &lt;!&ndash; Modal &ndash;&gt;-->
+<!--                                                                        <div class="modal fade" th:id="edit_+${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--                                                                            <div class="modal-dialog" role="document">-->
+<!--                                                                                <div th:replace="/block/forms :: modalEditUserForm"></div>-->
+<!--                                                                            </div>-->
+<!--                                                                        </div>-->
+<!--                                                                    </td>-->
+<!--                                                                    <td>-->
+<!--                                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-delete" th:attr="data-target='#delete_'+${user.getId()}" th:text="Удалить"></button>-->
 
-                            <!--                                            &lt;!&ndash; Modal &ndash;&gt;-->
-                            <!--                                            <div class="modal fade" th:id="delete_+${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="userDeleteModalLabel" aria-hidden="true">-->
-                            <!--                                                <div class="modal-dialog" role="document">-->
-                            <!--                                                    <div th:replace="/block/forms :: modalDeleteUserForm"></div>-->
-                            <!--                                                </div>-->
-                            <!--                                            </div>-->
-                            <!--                                        </td>-->
+<!--                                                                        &lt;!&ndash; Modal &ndash;&gt;-->
+<!--                                                                        <div class="modal fade" th:id="delete_+${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="userDeleteModalLabel" aria-hidden="true">-->
+<!--                                                                            <div class="modal-dialog" role="document">-->
+<!--                                                                                <div th:replace="/block/forms :: modalDeleteUserForm"></div>-->
+<!--                                                                            </div>-->
+<!--                                                                        </div>-->
+<!--                                                                    </td>-->
 
 <!--                                                                </tr>-->
 
-                            <!--                                </th:block>-->
+<!--                                                            </th:block>-->
                             </tbody>
                         </table>
                     </div>
