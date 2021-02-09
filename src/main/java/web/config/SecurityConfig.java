@@ -63,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 //страницы аутентификаци доступна всем
-                .antMatchers("/**").anonymous()
+//                .antMatchers("/**").anonymous()
                 .antMatchers("/login").anonymous()
                 .antMatchers("/css/**", "/js/**").permitAll()
                 // защищенные URL
