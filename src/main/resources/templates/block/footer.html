@@ -26,15 +26,123 @@
             <script th:src="@{/js/my.js}"></script>
 <!--         или-->
         <script>
-            // <div class="modal fade" th:id="edit_+${user.getId()}" tabIndex="-1" role="dialog"
-            //      aria-labelledby="exampleModalLabel" aria-hidden="true">
-            //     <div className="modal-dialog" role="document">
-            //         <div th:replace="/block/forms :: modalEditUserForm"></div>
-            //     </div>
-            // </div>
-            function modalEdit(user, role) {
+    //<div class="modal-body text-center" th:fragment="modalContentEditUserForm">
+    //
+    //             ID:
+    //         </p>
+    //         <input type="text"  name="name" th:value="${user.getId()}" readonly/>
+    //         </p>
+    //
+    //         Имя:
+    //         </p>
+    //         <input type="text" name="firstname" th:value="${user.getFirstName()}" required/>
+    //         <!--                                    <div th:if="${#fields.hasErrors('name')}"></div>-->
+    //         </p>
+    //
+    //         Фамилия:
+    //         </p>
+    //         <input type="text" name="lastname" th:value="${user.getLastName()}" required/>
+    //         <!--                                    <div th:if="${#fields.hasErrors('lastname')}"></div>-->
+    //         </p>
+    //
+    //         Возраст:
+    //         </p>
+    //         <input type="number" step="1" name="age" th:value="${user.getAge()}" required/>
+    //         <!--                                    <div th:if="${#fields.hasErrors('age')}"></div>-->
+    //         </p>
+    //
+    //         E-mail:
+    //         </p>
+    //         <input type="email" name="email" th:value="${user.getEmail()}" required/>
+    //         <!--        <div th:if="${#fields.hasErrors('email')}"></div>-->
+    //         </p>
+    //
+    //         Пароль:
+    //         </p>
+    //         <input type="password" name="password" required/>
+    //         <!--        <div  th:if="${#fields.hasErrors('password')}"></div>-->
+    //         </p>
+    //
+    //         Роль:
+    //         <p><select th:id="${user.getId()}" multiple size="3" name="addrole" required>
+    //         <th:block th:each="role : ${roles}">
+    //
+    //         <option th:value="${role.getName()}"><th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block></option>
+    //
+    //         </th:block>
+    //         </select></p>
+    //
+    //         <th:block th:each="roleUser : ${user.getRoles()}">
+    //
+    //
+    //
+    //
+    //
+    //
+    // </th:block>
+    //
+    // </div>
+            function modalEdit(user, role, form) {
                 //need function getAllRole()
-
+                if(form == "edit") {
+                    formName = "edit_";
+                    formTitle = "Edit user";
+                    ariaLabelledby = "exampleModalLabel";
+                    idModalTitle = "exampleModalLabel";
+                    requestMethod = "patch";
+                    buttomClass =  "btn-primary";
+                    buttomValue = "Save";
+                    fieldReadonly = false;
+                }
+                if(form == "delete") {
+                    formName = "delete_";
+                    formTitle = "Delete user";
+                    ariaLabelledby = "userDeleteModalLabel";
+                    idModalTitle = "userDeleteModalLabel";
+                    requestMethod = "delete";
+                    buttomClass = "btn-danger";
+                    buttomValue = "Delete";
+                    fieldReadonly = true;
+                }
+                return $('<div>').attr({ class: "modal fade", id: formName + user.id, tabIndex: "-1", role: "dialog", 'aria-labelledby': ariaLabelledby, 'aria-hidden': "true" }).append(
+                    $('<div>').attr({ class: "modal-dialog", role: "document" }).append(
+                        $('<div>').attr({ class: "modal-content" }).append(
+                            $('<div>').attr({ class: "modal-header" }).append(
+                                $('<h5>').attr({ class: "modal-title", id:  idModalTitle }).text( formTitle ),
+                                $('<buttom>').attr({ type: "button", class: "close", 'data-dismiss': "modal", 'aria-label': "Close" }).append(
+                                    $('<span>').attr({ 'aria-hidden': "true" }).html('&#215;')
+                                )
+                            ),
+                            $('<form>').attr({ method: requestMethod, action: "/admin/users/"+user.id }).append(
+                                // $('<input>').attr({}), // hidden _method: patch or REST
+                                $('<div>').attr({ class: "modal-body text-center" }).append(
+                                    $('<p>').text('ID:'),
+                                    $('<input>').attr({ type: "text",  name: "name", value: user.id, 'readonly': true }),
+                                    $('<p>').text('Имя:'),
+                                    $('<input>').attr({ type: "text",  name: "firstname", value: user.firstName, 'readonly': fieldReadonly }),
+                                    $('<p>').text('Фамилия:'),
+                                    $('<input>').attr({ type: "text",  name: "lastname", value: user.lastName, 'readonly': fieldReadonly }),
+                                    $('<p>').text('Возраст:'),
+                                    $('<input>').attr({ type: "number", step: "1", name: "age", value: user.age, 'readonly': fieldReadonly }),
+                                    $('<p>').text('E-mail:'),
+                                    $('<input>').attr({ type: "email",  name: "email", value: user.email, 'readonly': fieldReadonly }),
+                                    $('<p>').text('Пароль:'),
+                                    $('<input>').attr({ type: "password",  name: "password", 'readonly': fieldReadonly }),
+                                    $('<p>').text('Роль:'),
+                                    $('<p>').append(
+                                        $('select').prop({ id: user.id, 'multiple': true, size: "3", name: "addrole", 'required': fieldReadonly }).append(
+                                        // Необходимо получить весь список ролей, и выделить роли пользователя для правки, только роли пользователя для удаления
+                                        )
+                                    ),
+                                ), // th:replace="/block/forms :: modalContentEditUserForm"
+                                $('<div>').attr({ class: "modal-footer" }).append(
+                                    $('<button>').attr({ type: "button", class: "btn btn-secondary", 'data-dismiss': "modal" }).text('Close'),
+                                    $('<input>').attr({ class: "btn " + buttomClass, type: "submit", value: buttomValue })
+                                )
+                            )
+                        )
+                    )
+                )
             }
 
             function listUsers($) {
@@ -53,9 +161,9 @@
                                 $("<td></td>").text( users[i].lastName ),
                                 $("<td></td>").text( users[i].age ),
                                 $("<td></td>").text( users[i].email ),
-                                $("<td></td>").text( userRole ).prop( {id: role} ),
-                                $("<td></td>").append( buttonEditUser(users[i]) ), //функция с параметрами (users[i], userRole)
-                                $("<td></td>").append( buttonDeleteUser(users[i]) ) //функция с параметрами (users[i], userRole)
+                                $("<td></td>").text( userRole ),//.prop( {id: role} ),
+                                $("<td id='edit'></td>").append( buttonEditUser(users[i]), modalEdit(users[i], userRole, "edit") ), //функция с параметрами (users[i], userRole)
+                                $("<td></td>").append( buttonDeleteUser(users[i]), modalEdit(users[i], userRole, "delete") ) //функция с параметрами (users[i], userRole)
                             ).appendTo('#allUsersTable');
                         }
                     })
