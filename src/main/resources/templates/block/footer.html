@@ -29,10 +29,16 @@
             function getAllRoles($){
                 getAllRolesJson($).then(function (roles) {
                     $("[id ^= 'edit_'] select").empty();
+                    $("#list-new-user select").empty();
                     for (var i = 0; i < roles.length; i++) {
-                        $('<option>').text(roles[i].name).appendTo("[id ^= 'edit_'] select");
+                        $('<option>').attr({ value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("[id ^= 'edit_'] select", "#list-new-user select");
                     }
                 })
+            }
+            function selectedUserRole(id, roles){
+                for(var i = 0; i < roles.length; i++){
+                    $('select#'+ id +' option[value = '+ roles[i].name +']').prop('selected', true);
+                }
             }
             function modalEdit(user, allRoles, form) {
 
@@ -131,9 +137,29 @@
                     });
 
             }
+            function addNewUser($) {
+                $('<form>').attr({ method: "post", action: "/admin/users" }).append(
+                    $('<p>').text('Введите имя:'),
+                    $('<input>').attr({ type: "text",  name: "name", 'required': true }),
+                    $('<p>').text('Введите фамилию:'),
+                    $('<input>').attr({ type: "text",  name: "lastname", 'required': true }),
+                    $('<p>').text('Введите возраст:'),
+                    $('<input>').attr({ type: "text", name: "age", 'required': true }),
+                    $('<p>').text('Введите адрес эл. почты:'),
+                    $('<input>').attr({ type: "email",  name: "email", 'required': true }),
+                    $('<p>').text('Введите пароль:'),
+                    $('<input>').attr({ type: "password",  name: "password", 'required': true }),
+                    $('<p>').text('Роль:'),
+                    $('<p>').append(
+                        $('<select>').prop({ 'multiple': true, size: "3", name: "addrole", 'required': true })
+                    ),
+                    $('<input>').attr({ class: "btn btn-success", type: "submit", value: "Создать пользователя" })
+                ).appendTo("#list-new-user [class = 'text-center']");
+                getAllRoles($);
+            }
 
 
-            $( document ).ready( authUserInfo ).ready( listUsers );
+            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser );
         </script>
     </th:block>
 

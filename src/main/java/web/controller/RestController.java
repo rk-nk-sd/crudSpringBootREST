@@ -54,7 +54,7 @@ public class RestController {
     }
 
     @GetMapping("/roles/new-role")
-    public ResponseEntity<Role> createRoleForm(@ModelAttribute("role") Role role) {
+    public ResponseEntity<Role> createRoleRequest(@ModelAttribute("role") Role role) {
         return ResponseEntity.ok(roleService.createRole(role));
     }
 
@@ -85,7 +85,7 @@ public class RestController {
 
 //    Разобраться
     @DeleteMapping("/roles/{id}")
-    public ResponseEntity delete ( @PathVariable("id") Long id){
+    public ResponseEntity delete ( @PathVariable("id") Long id) {
         roleService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -115,14 +115,14 @@ public class RestController {
 //        return "admin/create_user";
 //    }
 
-    @GetMapping("/users/{id}/edit")
-    public String editUser (Model model,@PathVariable("id") int id, Authentication authentication){
-        //Вернет html форму для редактирования страницы пользователя
-        model.addAttribute("user", userService.getCurrentUser(id));
-        model.addAttribute("roles", roleService.getAllRole());
-        model.addAttribute("userinfo", authentication);
-        return "admin/edit_user";
-    }
+//    @GetMapping("/users/{id}/edit")
+//    public String editUser (Model model,@PathVariable("id") int id, Authentication authentication){
+//        //Вернет html форму для редактирования страницы пользователя
+//        model.addAttribute("user", userService.getCurrentUser(id));
+//        model.addAttribute("roles", roleService.getAllRole());
+//        model.addAttribute("userinfo", authentication);
+//        return "admin/edit_user";
+//    }
 
     @PostMapping("/users")
     public String createUser (@ModelAttribute("user") @Valid User user,
