@@ -44,6 +44,18 @@ function getAllUsersJson(jQuery) {
         })
 }
 
+//GET ALL ROLES
+function getAllRolesJson(jQuery) {
+    return fetch('http://localhost:8088/admin/roles')
+        .then(response => {
+            if(response.ok){
+                return response.json()
+            } else {
+                throw Error
+            }
+        })
+}
+
 //BUTTONS
 function buttonDeleteUser(user) {
     return $("<button>").attr({
