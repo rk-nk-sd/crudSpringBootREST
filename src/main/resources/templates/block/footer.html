@@ -28,6 +28,7 @@
         <script>
             function getAllRoles($){
                 getAllRolesJson($).then(function (roles) {
+                    $("[id ^= 'edit_'] select").empty();
                     for (var i = 0; i < roles.length; i++) {
                         $('<option>').text(roles[i].name).appendTo("[id ^= 'edit_'] select");
                     }
@@ -46,7 +47,7 @@
                     buttomClass =  "btn-primary";
                     buttomValue = "Save";
                     fieldReadonly = false;
-                    options += getAllRoles($);
+                    getAllRoles($);
                 }
                 if(form == "delete") {
                     formName = "delete_";
