@@ -5,32 +5,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
+import web.repository.UserRepository;
 import web.service.RoleService;
 import web.service.UserService;
 
 import javax.validation.Valid;
-import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:8088")
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/admin")
 public class RestController {
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository repository;
 
     @Autowired
-    public RestController(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
+    public RestController(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder, UserRepository repository) {
         this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.repository = repository;
     }
 
 //    @GetMapping()
@@ -125,68 +126,33 @@ public class RestController {
 //    }
 
     @PostMapping("/users")
-    public String createUser (@ModelAttribute("user") @Valid User user,
-                              BindingResult bindingResult,
-                              @RequestParam(name = "name") String name,
-                              @RequestParam(name = "lastname") String lastname,
-                              @RequestParam(name = "age") String age,
-                              @RequestParam(name = "email") String email,
-                              @RequestParam(name = "password") String password,
-                              @RequestParam(name = "addrole") String[] role){
-        if(bindingResult.hasErrors())
-            return "admin/create_user";
-
-        Set<Role> roles = new HashSet<>();
-//        roles.add(userService.findByRoleName("ROLE_USER"));
-        for (String variable : role) {
-            roles.add(userService.findByRoleName(variable));
-        }
-
-        user.setFirstName(name);
-        user.setLastName(lastname);
-        user.setAge(Integer.valueOf(age).intValue());
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRoles(roles);
-
-        userService.addNewUser(user);
-        return "redirect:/admin";
+    public User createUser (@RequestBody User user) {
+        return userService.addNewUser(user);
     }
 
     @PatchMapping("/users/{id}")
-    public String update (@ModelAttribute("user") @Valid User user,
-                          BindingResult bindingResult,
-                          Model model,
-                          @PathVariable("id") int id,
-                          @RequestParam(name = "firstname") String firstname,
-                          @RequestParam(name = "lastname") String lastname,
-                          @RequestParam(name = "age") String age,
-                          @RequestParam(name = "email") String email,
-                          @RequestParam(name = "password") String password,
-                          @RequestParam(name = "addrole") String[] role){
-        //Обновляет пользователя
-        if(bindingResult.hasErrors())
-            return "admin/index";
+    public ResponseEntity<User> update ( @PathVariable("id") int id, @RequestBody User user ){
+        //возможно вариант 1
+//        Optional<User> userOptional = Optional.ofNullable(userService.getCurrentUser(id));
+//
+//        if (!userOptional.isPresent())
+//            return ResponseEntity.notFound().build();
+//
+//        user.setId(id);
+//
+//        userService.update(user);
+//
+//        return ResponseEntity.noContent().build();
 
-        Set<Role> roles = new HashSet<>();
-//        Set<Role> roles = user.getRoles();
-        for (String variable : role) {
-            // некоторые операторы
-            // ...
-            roles.add(userService.findByRoleName(variable));
-        }
-//        roles.add(userService.findByRoleName(role));
-//        roles.add(userService.findByRoleName("ROLE_USER"));
-
-        user.setFirstName(firstname);
-        user.setLastName(lastname);
-        user.setAge(Integer.valueOf(age).intValue());
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRoles(roles);
-
-        userService.update(user);
-        return "redirect:/admin";
+        // возможно вариант 2
+//        return userService.getCurrentUser(id)
+//                .map(record -> {
+//                    record.setName(contact.getName());
+//                    record.setEmail(contact.getEmail());
+//                    record.setPhone(contact.getPhone());
+//                    Contact updated = repository.save(record);
+//                    return ResponseEntity.ok().body(updated);
+//                }).orElse(ResponseEntity.notFound().build());
     }
 
 

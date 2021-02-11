@@ -36,11 +36,11 @@
                     }
                 })
             }
-            function selectedUserRole(id, roles){
-                for(var i = 0; i < roles.length; i++){
-                    $('select#'+ id +' option[value = '+ roles[i].name +']').prop('selected', true);
-                }
-            }
+            // function selectedUserRole(id, roles){
+            //     for(var i = 0; i < roles.length; i++){
+            //         $('select#'+ id +' option[value = '+ roles[i].name +']').prop('selected', true);
+            //     }
+            // }
             function modalEdit(user, allRoles, form) {
 
                let options = '';
@@ -141,7 +141,7 @@
             function addNewUser($) {
                 $('<form>').attr({ method: "post", action: "/admin/users" }).append(
                     $('<p>').text('Введите имя:'),
-                    $('<input>').attr({ type: "text",  name: "name", 'required': true }),
+                    $('<input>').attr({ type: "text",  name: "firstname", 'required': true }),
                     $('<p>').text('Введите фамилию:'),
                     $('<input>').attr({ type: "text",  name: "lastname", 'required': true }),
                     $('<p>').text('Введите возраст:'),
