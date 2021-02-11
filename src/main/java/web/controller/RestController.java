@@ -132,6 +132,7 @@ public class RestController {
 
     @PatchMapping("/users/{id}")
     public ResponseEntity<User> update ( @PathVariable("id") int id, @RequestBody User user ){
+        return ResponseEntity.ok(userService.update(user));
         //возможно вариант 1
 //        Optional<User> userOptional = Optional.ofNullable(userService.getCurrentUser(id));
 //
