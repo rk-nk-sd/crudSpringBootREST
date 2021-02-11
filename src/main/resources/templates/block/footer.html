@@ -31,7 +31,8 @@
                     $("[id ^= 'edit_'] select").empty();
                     $("#list-new-user select").empty();
                     for (var i = 0; i < roles.length; i++) {
-                        $('<option>').attr({ value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("[id ^= 'edit_'] select", "#list-new-user select");
+                        $('<option>').attr({ value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("[id ^= 'edit_'] select");
+                        $('<option>').attr({ value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("#list-new-user select");
                     }
                 })
             }
