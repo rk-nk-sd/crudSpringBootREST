@@ -31,8 +31,8 @@
                     $("[id ^= 'edit_'] select").empty();
                     $("#list-new-user select").empty();
                     for (var i = 0; i < roles.length; i++) {
-                        $('<option>').attr({ value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("[id ^= 'edit_'] select");
-                        $('<option>').attr({ value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("#list-new-user select");
+                        $('<option>').attr({ name: "name", value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("[id ^= 'edit_'] select");
+                        $('<option>').attr({ name: "name", value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("#list-new-user select");
                     }
                 })
             }
@@ -139,7 +139,7 @@
 
             }
             function addNewUser($) {
-                $('<form>').attr({ method: "post", action: "/admin/users" }).append(
+                $('<form>').attr({ id: "createUserForm" }).append( // method: "post", action: "/admin/users"
                     $('<p>').text('Введите имя:'),
                     $('<input>').attr({ type: "text",  name: "firstname", 'required': true }),
                     $('<p>').text('Введите фамилию:'),
@@ -152,15 +152,79 @@
                     $('<input>').attr({ type: "password",  name: "password", 'required': true }),
                     $('<p>').text('Роль:'),
                     $('<p>').append(
-                        $('<select>').prop({ 'multiple': true, size: "3", name: "addrole", 'required': true })
+                        $('<select>').prop({ 'multiple': true, size: "3", name: "roles", 'required': true })
                     ),
                     $('<input>').attr({ class: "btn btn-success", type: "submit", value: "Создать пользователя" })
                 ).appendTo("#list-new-user [class = 'text-center']");
                 getAllRoles($);
             }
 
+            function createNewUserJson(newUserFormData) {
 
-            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser );
+                console.log("Привет из createNewUserJson");
+
+               return fetch('http://localhost:8088/admin/users', {
+                   method: 'POST',
+                   headers: {
+                       Accept: "application/json",
+                       'Content-Type': 'application/json;charset=utf-8',
+                       referrerPolicy: "origin-when-cross-origin"
+                   },
+                   body: JSON.stringify(newUserFormData)
+               })
+                   .then(response => {
+                   if(response.ok){
+                       return response.json()
+                   } else {
+                       throw Error
+                   }
+               })
+            }
+
+            function sendFormCreateNewUser($) {
+                let user = {
+
+                }
+                console.log("это функция sendFormCreateNewUser()");
+
+                $("#createUserForm").submit(function (e) {
+                    e.preventDefault();
+                    //какие то действия
+                    // console.log("Это слушатель...");
+
+                    var $data = {};
+                    $('#createUserForm').find ('input[type!="submit"], select').each(function() {
+                        if(this.name == 'firstname' || this.name == 'lastname' || this.name == 'age' || this.name == 'email')
+                        $data[this.name] = $(this).val();
+
+                        if(this.name == 'roles')
+                            $data[this.name] = [{ name: $(this).val() }];
+                    });
+                    let user = {
+
+                    }
+
+                    console.log("Данные:" +  JSON.stringify($data));
+
+                    createNewUserJson($data);
+
+                });
+
+
+                // document.getElementById("#createUserForm").addEventListener('submit', function (e) {
+                //     e.preventDefault();
+                //
+                //     console.log("это слушатель sendFormCreateNewUser()");
+                //
+                let formData = new FormData(document.getElementById("#createUserForm"));
+                formData = Object.fromEntries(formData);
+                //
+                // createNewUserJson(formData);
+                // })
+            }
+
+
+            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser );
         </script>
     </th:block>
 
