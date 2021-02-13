@@ -31,8 +31,8 @@
                     $("[id ^= 'edit_'] select").empty();
                     $("#list-new-user select").empty();
                     for (var i = 0; i < roles.length; i++) {
-                        $('<option>').attr({ name: "name", value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("[id ^= 'edit_'] select");
-                        $('<option>').attr({ name: "name", value: roles[i].name }).text(roles[i].name.replace("ROLE_", "")).appendTo("#list-new-user select");
+                        $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("[id ^= 'edit_'] select");
+                        $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("#list-new-user select");
                     }
                 })
             }
@@ -162,14 +162,15 @@
             function createNewUserJson(newUserFormData) {
 
                 console.log("Привет из createNewUserJson");
+                console.log("Данные:" +  JSON.stringify(newUserFormData));
 
                return fetch('http://localhost:8088/admin/users', {
                    method: 'POST',
                    headers: {
-                       Accept: "application/json",
-                       'Content-Type': 'application/json;charset=utf-8',
-                       referrerPolicy: "origin-when-cross-origin"
+                       'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
+                       'Content-Type': 'application/json;charset=utf-8'
                    },
+
                    body: JSON.stringify(newUserFormData)
                })
                    .then(response => {
@@ -189,38 +190,30 @@
 
                 $("#createUserForm").submit(function (e) {
                     e.preventDefault();
-                    //какие то действия
-                    // console.log("Это слушатель...");
 
                     var $data = {};
-                    $('#createUserForm').find ('input[type!="submit"], select').each(function() {
-                        if(this.name == 'firstname' || this.name == 'lastname' || this.name == 'age' || this.name == 'email')
+                    let listUsers = [];
+                    $('#createUserForm').find('input[type!="submit"], select').each(function() {
+
+                        if( this.name === "roles" ) {
+                            for(var i=0; i<$(this).val().length; i++){
+                                listUsers[i] = { "id": this.value }
+                            }
+                        }
+                        if( this.name === "age" ) {
+                            $data[this.name] = Number.parseInt(this.value);
+                        }
+
                         $data[this.name] = $(this).val();
 
-                        if(this.name == 'roles')
-                            $data[this.name] = [{ name: $(this).val() }];
                     });
-                    let user = {
 
-                    }
-
-                    console.log("Данные:" +  JSON.stringify($data));
+                    $data['roles'] = listUsers;
 
                     createNewUserJson($data);
 
                 });
 
-
-                // document.getElementById("#createUserForm").addEventListener('submit', function (e) {
-                //     e.preventDefault();
-                //
-                //     console.log("это слушатель sendFormCreateNewUser()");
-                //
-                let formData = new FormData(document.getElementById("#createUserForm"));
-                formData = Object.fromEntries(formData);
-                //
-                // createNewUserJson(formData);
-                // })
             }
 
 

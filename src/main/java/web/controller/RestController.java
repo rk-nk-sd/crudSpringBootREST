@@ -125,9 +125,13 @@ public class RestController {
 //        return "admin/edit_user";
 //    }
 
+//    @PostMapping("/users")
+//    public User createUser (@RequestBody User user) {
+//        return userService.addNewUser(user);
+//    }
     @PostMapping("/users")
-    public User createUser (@RequestBody User user) {
-        return userService.addNewUser(user);
+    public ResponseEntity<User> createUser (@RequestBody User user) {
+        return ResponseEntity.ok(userService.addNewUser(user));
     }
 
     @PatchMapping("/users/{id}")
