@@ -141,9 +141,9 @@
             function addNewUser($) {
                 $('<form>').attr({ id: "createUserForm" }).append( // method: "post", action: "/admin/users"
                     $('<p>').text('Введите имя:'),
-                    $('<input>').attr({ type: "text",  name: "firstname", 'required': true }),
+                    $('<input>').attr({ type: "text",  name: "firstName", 'required': true }),
                     $('<p>').text('Введите фамилию:'),
-                    $('<input>').attr({ type: "text",  name: "lastname", 'required': true }),
+                    $('<input>').attr({ type: "text",  name: "lastName", 'required': true }),
                     $('<p>').text('Введите возраст:'),
                     $('<input>').attr({ type: "text", name: "age", 'required': true }),
                     $('<p>').text('Введите адрес эл. почты:'),

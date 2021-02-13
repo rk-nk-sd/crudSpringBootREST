@@ -130,8 +130,9 @@ public class RestController {
 //        return userService.addNewUser(user);
 //    }
     @PostMapping("/users")
-    public ResponseEntity<User> createUser (@RequestBody User user) {
-        return ResponseEntity.ok(userService.addNewUser(user));
+    public ResponseEntity<?> createUser (@RequestBody User user) {
+        userService.addNewUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/users/{id}")
