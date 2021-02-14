@@ -36,11 +36,7 @@
                     }
                 })
             }
-            // function selectedUserRole(id, roles){
-            //     for(var i = 0; i < roles.length; i++){
-            //         $('select#'+ id +' option[value = '+ roles[i].name +']').prop('selected', true);
-            //     }
-            // }
+
             function modalEdit(user, allRoles, form) {
 
                let options = '';
@@ -69,7 +65,7 @@
                         options += '<option>' + user.roles[i].name.replace("ROLE_", "") + '</option>';
                     }
                 }
-                return $('<div>').attr({ class: "modal fade", id: formName + user.id, tabIndex: "-1", role: "dialog", 'aria-labelledby': ariaLabelledby, 'aria-hidden': "true" }).append(
+                $('<div>').attr({ class: "modal fade", id: formName + user.id, tabIndex: "-1", role: "dialog", 'aria-labelledby': ariaLabelledby, 'aria-hidden': "true" }).append(
                     $('<div>').attr({ class: "modal-dialog", role: "document" }).append(
                         $('<div>').attr({ class: "modal-content" }).append(
                             $('<div>').attr({ class: "modal-header" }).append(
@@ -78,7 +74,7 @@
                                     $('<span>').attr({ 'aria-hidden': "true" }).html('&#215;')
                                 )
                             ),
-                            $('<form>').attr({ method: requestMethod, action: "/admin/users/"+user.id }).append(
+                            $('<form>').attr({ id: "del-"+user.id, class: "del-user" }).append( // method: requestMethod, action: "/admin/users/"+user.id
                                 // $('<input>').attr({}), // hidden _method: patch or REST
                                 $('<div>').attr({ class: "modal-body text-center" }).append(
                                     $('<p>').text('ID:'),
@@ -95,7 +91,7 @@
                                     $('<input>').attr({ type: "password",  name: "password", 'readonly': fieldReadonly }),
                                     $('<p>').text('Роль:'),
                                     $('<p>').append(
-                                        $('<select>').prop({ id: user.id, 'multiple': true, size: "3", name: "addrole", 'required': fieldReadonly }).append(
+                                        $('<select>').prop({ id: user.id, 'multiple': true, size: "3", name: "addrole", 'readonly': fieldReadonly }).append(
                                         // Необходимо получить весь список ролей, и выделить роли пользователя для правки, только роли пользователя для удаления
                                             options
                                         )
@@ -103,12 +99,12 @@
                                 ),
                                 $('<div>').attr({ class: "modal-footer" }).append(
                                     $('<button>').attr({ type: "button", class: "btn btn-secondary", 'data-dismiss': "modal" }).text('Close'),
-                                    $('<input>').attr({ class: "btn " + buttomClass, type: "submit", value: buttomValue })
+                                    $('<input>').attr({ class: "btn " + buttomClass, type: "submit", value: buttomValue }).submit(DeleteUser(user))
                                 )
                             )
                         )
                     )
-                )
+                ).appendTo("#mod-del");
             }
 
             function listUsers($) {
@@ -183,10 +179,6 @@
             }
 
             function sendFormCreateNewUser($) {
-                let user = {
-
-                }
-                console.log("это функция sendFormCreateNewUser()");
 
                 $("#createUserForm").submit(function (e) {
                     e.preventDefault();
@@ -197,11 +189,8 @@
 
                         if( this.name === "roles" ) {
                             for(var i=0; i<$(this).val().length; i++){
-                                listUsers[i] = { "id": this.value }
+                                listUsers[i] = { "id": this[i].value }
                             }
-                        }
-                        if( this.name === "age" ) {
-                            $data[this.name] = Number.parseInt(this.value);
                         }
 
                         $data[this.name] = $(this).val();
@@ -211,9 +200,31 @@
                     $data['roles'] = listUsers;
 
                     createNewUserJson($data);
-
+                    $('#createUserForm').empty();
+                    addNewUser($);
                 });
+                listUsers($); // не подгружает обновленный список
+            }
 
+            //DELETE USER
+            function DeleteUserJson(id) {
+                return fetch('http://localhost:8088/admin/users/'+id, {
+                    method: "delete"
+                })
+                    .then(response => {
+                        if(response.ok){
+                            return response.json()
+                        } else {
+                            throw Error
+                        }
+                    })
+            }
+            function DeleteUser(user) {
+                $('form[id="del-'+user.id+'"]').submit(function (e) {
+                    e.preventDefault();
+                    // DeleteUserJson(id);
+                    alert("Clicked id=" + user.id);
+                });
             }
 
 
