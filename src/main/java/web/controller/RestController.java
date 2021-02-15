@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8088")
 @org.springframework.web.bind.annotation.RestController
-@RequestMapping("/admin")
+@RequestMapping("/")
 public class RestController {
     private final UserService userService;
     private final RoleService roleService;
@@ -44,29 +44,29 @@ public class RestController {
 
     //=============Role=============
 
-    @GetMapping("/roles")
+    @GetMapping("/admin/roles")
     public ResponseEntity<List<Role>> getAllRoles() {
         return ResponseEntity.ok(roleService.getAllRole());
     }
 
-    @GetMapping("/roles/{id}")
+    @GetMapping("/admin/roles/{id}")
     public ResponseEntity<Role> getRole(@PathVariable("id") Long id) {
         return ResponseEntity.ok(roleService.getCurrentRole(id));
     }
 
-    @GetMapping("/roles/new-role")
+    @GetMapping("/admin/roles/new-role")
     public ResponseEntity<Role> createRoleRequest(@ModelAttribute("role") Role role) {
         return ResponseEntity.ok(roleService.createRole(role));
     }
 
 
 //    Разобраться
-    @GetMapping("/roles/{id}/edit")
+    @GetMapping("/admin/roles/{id}/edit")
     public ResponseEntity<Role> editRole (@PathVariable("id") Long id){
         return ResponseEntity.ok(roleService.getCurrentRole(id));
     }
 
-    @PostMapping("/roles")
+    @PostMapping("/admin/roles")
     public String createUser (@ModelAttribute("role") @Valid Role role,
                               BindingResult bindingResult,
                               @RequestParam(name = "rolename") String rolename){
@@ -79,13 +79,13 @@ public class RestController {
         return "redirect:/admin/roles";
     }
 
-    @PatchMapping("/roles/{id}")
+    @PatchMapping("/admin/roles/{id}")
     public ResponseEntity<Role> update (@ModelAttribute("role") @Valid Role role){
         return ResponseEntity.ok(roleService.update(role));
     }
 
 //    Разобраться
-    @DeleteMapping("/roles/{id}")
+    @DeleteMapping("/admin/roles/{id}")
     public ResponseEntity delete ( @PathVariable("id") Long id) {
         roleService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
@@ -98,15 +98,19 @@ public class RestController {
         return ResponseEntity.ok(authentication);
     }
 
-    @GetMapping("/users/getAllUsers")
+    @GetMapping("/admin/users/getAllUsers")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/admin/users/{id}")
     public ResponseEntity<User> getCurrentUser(@PathVariable("id") int id) {
         return ResponseEntity.ok(userService.getCurrentUser(id));
     }
+    @PostMapping("/users/get/by/email")
+        public ResponseEntity<User> getUserByEmail(@RequestBody User user) {
+        return ResponseEntity.ok(userService.findByUserEmail(user.getEmail()));
+        }
 
     //перенес
 //    @GetMapping("/users/new-user")
@@ -129,40 +133,37 @@ public class RestController {
 //    public User createUser (@RequestBody User user) {
 //        return userService.addNewUser(user);
 //    }
-    @PostMapping("/users")
-    public ResponseEntity<?> createUser (@RequestBody User user) {
+    @PostMapping("/admin/users/create/user")
+    public ResponseEntity<?> createUser (@RequestBody User _user) {
+        User user = new User();
+
+        user.setFirstName(_user.getFirstName());
+        user.setLastName(_user.getLastName());
+        user.setAge(_user.getAge());
+        user.setEmail(_user.getEmail());
+        user.setPassword(passwordEncoder.encode(_user.getPassword()));
+        user.setRoles(_user.getRoles());
+
         userService.addNewUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/users/{id}")
-    public ResponseEntity<User> update ( @PathVariable("id") int id, @RequestBody User user ){
-        return ResponseEntity.ok(userService.update(user));
-        //возможно вариант 1
-//        Optional<User> userOptional = Optional.ofNullable(userService.getCurrentUser(id));
-//
-//        if (!userOptional.isPresent())
-//            return ResponseEntity.notFound().build();
-//
-//        user.setId(id);
-//
-//        userService.update(user);
-//
-//        return ResponseEntity.noContent().build();
+    @PatchMapping("/admin/users/{id}/edit")
+    public ResponseEntity<User> update (@PathVariable("id") int id, @RequestBody User _user ){ // @PathVariable("id") int id,
+        User user = userService.getCurrentUser(id);
 
-        // возможно вариант 2
-//        return userService.getCurrentUser(id)
-//                .map(record -> {
-//                    record.setName(contact.getName());
-//                    record.setEmail(contact.getEmail());
-//                    record.setPhone(contact.getPhone());
-//                    Contact updated = repository.save(record);
-//                    return ResponseEntity.ok().body(updated);
-//                }).orElse(ResponseEntity.notFound().build());
+        user.setFirstName(_user.getFirstName());
+        user.setLastName(_user.getLastName());
+        user.setAge(_user.getAge());
+        user.setEmail(_user.getEmail());
+        user.setPassword(passwordEncoder.encode(_user.getPassword()));
+        user.setRoles(_user.getRoles());
+
+        return ResponseEntity.ok(userService.update(user));
     }
 
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/admin/users/{id}")
     public ResponseEntity delete ( @PathVariable("id") int id){
         userService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

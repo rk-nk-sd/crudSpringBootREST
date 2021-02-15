@@ -9,10 +9,27 @@
     <div class="row flex-xl-nowrap pt-4">
 
 <!--                Меню-->
-<!--        <div th:replace="/block/menu :: ${menu.toString()}"></div>-->
+        <div th:replace="/block/menu :: ${menu.toString()}"></div>
 
 
 <!--            Основной контейнер-->
+        <div class="tab-content col-sm-9" id="v-pills-tabContent">
+<!--            <div class="tab-pane fade show active" id="v-pills-admin" role="tabpanel" aria-labelledby="v-pills-admin-tab">-->
+
+<!--                <div class="form-group">-->
+
+<!--                    <div th:replace="/block/adminContent :: adminPage"></div>-->
+
+<!--                </div>-->
+
+<!--            </div>-->
+            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+
+                <div th:replace="/block/userContent :: profilePage"></div>
+
+            </div>
+            <div id="mod-del"></div>
+        </div>
 
     </div>
 
@@ -20,7 +37,7 @@
 <!--    <div th:replace="/block/footer :: footer"></div>-->
 </div>
 
-<!--<th:block th:replace="/block/footer :: script"></th:block>-->
+<th:block th:replace="/block/footer :: script"></th:block>
 
 </body>
 </html>

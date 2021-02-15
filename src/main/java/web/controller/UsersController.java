@@ -38,4 +38,5 @@ public class UsersController {
         model.addAttribute("user", userService.findByUserEmail(authentication.getName()));
         return "users/index";
     }
+
 }

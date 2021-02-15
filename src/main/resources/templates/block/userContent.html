@@ -3,19 +3,6 @@
 
     <div th:fragment="profilePage">
 
-        <!--            <span sec:authentication="principal.authorities"></span>-->
-
-        <!--            <div class="row" sec:authorize="hasRole('ROLE_USER')">-->
-        <!--                <h2>This will only be displayed if authenticated user has role ROLE_USER.</h2>-->
-        <!--            </div>-->
-
-        <!--            <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">-->
-        <!--                This will only be displayed if authenticated user has role ROLE_ADMIN.-->
-        <!--            </div>-->
-
-
-
-
         <h4  class="list-group-item  border-0" style="background-color: #f7f7f7">User information-page</h4>
         <table class="table table-hover">
             <thead>
@@ -29,18 +16,7 @@
             </tr>
             </thead>
             <tbody id="currentUsersTable">
-            <tr>
-                <!--                        <th scope="row"  th:text="${user.getId()}"></th>-->
-                <!--                        <td  th:text="${user.getFirstName()}"></td>-->
-                <!--                        <td  th:text="${user.getLastName()}"></td>-->
-                <!--                        <td  th:text="${user.getAge()}"></td>-->
-                <!--                        <td th:text="${user.getEmail()}"></td>-->
-                <!--                        <td>-->
-                <!--                            <th:block th:each="role : ${user.getRoles()}">-->
-                <!--                                <th:block th:text="${#strings.substringAfter(role.getName(),'ROLE_')}"></th:block>-->
-                <!--                            </th:block>-->
-                <!--                        </td>-->
-            </tr>
+            <tr></tr>
             </tbody>
         </table>
     </div>

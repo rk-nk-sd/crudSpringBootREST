@@ -1,6 +1,10 @@
-// HEADER
+/***********************************
+ *
+ *           HEADER
+ *
+ ***********************************/
 function auth( jQuery ) {
-    return fetch('http://localhost:8088/admin/users/whoAmI')
+    return fetch('http://localhost:8088/users/whoAmI')
         .then(response => {
             if(response.ok){
                 return response.json()
@@ -30,6 +34,71 @@ function authUserInfo(jQuery) {
 
         })
 }
+
+/***********************************
+ *
+ *           USER PROFILE
+ *
+ ***********************************/
+function emailJson( email ) {
+    return fetch('http://localhost:8088/users/get/by/email', {
+        method: "post",
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+
+        body: JSON.stringify(email)
+    })
+        .then(response => {
+            if(response.ok){
+                // console.log(email);
+                return response.json()
+            } else {
+                throw Error
+            }
+        })
+}
+
+function profile() {
+    auth( jQuery )
+        .then(wai => {
+
+            let data = { "email": wai.principal.username };
+
+            if(wai.principal.username != null) {
+                emailJson( data ).then(function (user){
+                    $('#currentUsersTable').empty();
+                    let userRole = user.roles.map(
+                        function (role) {
+                            return " " + role.name.replace("ROLE_", "")
+                        });
+                    $('<tr></tr>').append(
+                        $("<th></th>").text( user.id ),
+                        $("<td></td>").text( user.firstName ),
+                        $("<td></td>").text( user.lastName ),
+                        $("<td></td>").text( user.age ),
+                        $("<td></td>").text( user.email ),
+                        $("<td></td>").text( userRole )
+                    ).appendTo('#currentUsersTable');
+                }).catch(function(err){
+                    console.log(err.message); //выведет сообщение "не удалось выполнить..."
+                });
+            }
+
+        })
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //GET ALL USERS

@@ -51,6 +51,8 @@
                     buttomValue = "Save";
                     fieldReadonly = false;
                     getAllRoles($);
+                    prefix = "edit-";
+                    sub = '';//sendFormUpdateUser(user);
                 }
                 if(form == "delete") {
                     formName = "delete_";
@@ -61,6 +63,8 @@
                     buttomClass = "btn-danger";
                     buttomValue = "Delete";
                     fieldReadonly = true;
+                    prefix = "del-";
+                    sub = '';
                     for(var i=0; i<user.roles.length; i++){
                         options += '<option>' + user.roles[i].name.replace("ROLE_", "") + '</option>';
                     }
@@ -74,7 +78,7 @@
                                     $('<span>').attr({ 'aria-hidden': "true" }).html('&#215;')
                                 )
                             ),
-                            $('<form>').attr({ id: "del-"+user.id, class: "del-user" }).append( // method: requestMethod, action: "/admin/users/"+user.id
+                            $('<form>').attr({ id: prefix+user.id }).append( // method: requestMethod, action: "/admin/users/"+user.id
                                 // $('<input>').attr({}), // hidden _method: patch or REST
                                 $('<div>').attr({ class: "modal-body text-center" }).append(
                                     $('<p>').text('ID:'),
@@ -99,7 +103,7 @@
                                 ),
                                 $('<div>').attr({ class: "modal-footer" }).append(
                                     $('<button>').attr({ type: "button", class: "btn btn-secondary", 'data-dismiss': "modal" }).text('Close'),
-                                    $('<input>').attr({ class: "btn " + buttomClass, type: "submit", value: buttomValue }).submit(DeleteUser(user))
+                                    $('<input>').attr({ class: "btn " + buttomClass, type: "submit", value: buttomValue }).submit(DeleteUser(user))//((form=='delete')?DeleteUser(user):sendFormUpdateUser(user))
                                 )
                             )
                         )
@@ -125,7 +129,7 @@
                                 $("<td></td>").text( users[i].email ),
                                 $("<td></td>").text( userRole ),//.prop( {id: role} ),
                                 $("<td id='edit'></td>").append( buttonEditUser(users[i]), modalEdit(users[i], users[i].roles, "edit") ), //функция с параметрами (users[i], userRole)
-                                $("<td></td>").append( buttonDeleteUser(users[i]), modalEdit(users[i], users[i].roles, "delete") ) //функция с параметрами (users[i], userRole)
+                                $("<td></td>").append( buttonDeleteUser(users[i]), modalEdit(users[i], users[i].roles, "delete") ) //функция с параметрами (users[i], userRole),
                             ).appendTo('#allUsersTable');
                         }
                     })
@@ -134,8 +138,15 @@
                     });
 
             }
+
+            /***********************************
+             *
+             *           CREATE USER
+             *
+             ***********************************/
+
             function addNewUser($) {
-                $('<form>').attr({ id: "createUserForm" }).append( // method: "post", action: "/admin/users"
+                $('<form>').attr({ id: "createUserForm" }).append(
                     $('<p>').text('Введите имя:'),
                     $('<input>').attr({ type: "text",  name: "firstName", 'required': true }),
                     $('<p>').text('Введите фамилию:'),
@@ -160,10 +171,11 @@
                 console.log("Привет из createNewUserJson");
                 console.log("Данные:" +  JSON.stringify(newUserFormData));
 
-               return fetch('http://localhost:8088/admin/users', {
+               return fetch('http://localhost:8088/admin/users/create/user', {
                    method: 'POST',
                    headers: {
-                       'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
+                       'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
+                       // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
                        'Content-Type': 'application/json;charset=utf-8'
                    },
 
@@ -206,8 +218,14 @@
                 listUsers($); // не подгружает обновленный список
             }
 
-            //DELETE USER
+            /***********************************
+             *
+             *           DELETE USER
+             *
+             ***********************************/
+
             function DeleteUserJson(id) {
+                console.log("Функция DeleteUserJson, переданный параметр: "+id);
                 return fetch('http://localhost:8088/admin/users/'+id, {
                     method: "delete"
                 })
@@ -222,14 +240,74 @@
             function DeleteUser(user) {
                 $('form[id="del-'+user.id+'"]').submit(function (e) {
                     e.preventDefault();
-                    // DeleteUserJson(id);
-                    alert("Clicked id=" + user.id);
+
+                    DeleteUserJson(user.id);
+                    $(".modal").modal("hide");
+                    listUsers($);
                 });
             }
+            /***********************************
+             *
+             *           UPDATE USER
+             *
+             ***********************************/
 
+            function updatedUserJson(editUserFormData) {
 
-            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser );
+                console.log("Привет из createNewUserJson");
+                console.log("Данные:" +  JSON.stringify(newUserFormData));
+
+                return fetch('http://localhost:8088/admin/users/update/user', {
+                    method: 'POST',
+                    headers: {
+                        // 'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
+                        // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+
+                    body: JSON.stringify(editUserFormData)
+                })
+                    .then(response => {
+                        if(response.ok){
+                            return response.json()
+                        } else {
+                            throw Error
+                        }
+                    })
+            }
+
+            function sendFormUpdateUser(user) {
+
+                $("#edit-"+user.id).submit(function (e) {
+                    e.preventDefault();
+
+                    var $data = {};
+                    let listUsers = [];
+                    $("#edit-"+user.id).find('input[type!="submit"], select').each(function() {
+
+                        if( this.name === "roles" ) {
+                            for(var i=0; i<$(this).val().length; i++){
+                                listUsers[i] = { "id": this[i].value }
+                            }
+                        }
+
+                        $data[this.name] = $(this).val();
+
+                    });
+
+                    $data['roles'] = listUsers;
+
+                    updatedUserJson($data);
+                    $(".modal").modal("hide");
+                    // $('#edit-"+user.id').empty();
+                    // addNewUser($);
+                });
+                listUsers($); // не подгружает обновленный список
+            }
+
+            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser ).ready(profile).ready(modalDel);
         </script>
+<!--        <script th:src="@{/js/deleteUser.js}"></script>-->
     </th:block>
 
 </html>
