@@ -141,27 +141,12 @@
             //
             // MODAL FOR EDIT USER
             //
-            function getAllRolesWithParam(userRole) {
+            function getAllRolesWithParam($) {
                 getAllRolesJson($).then(function (roles) {
-                    // $("[id ^= 'edit_'] select").empty();
                     $("#editModal select").empty();
-
-                    function diff(a, b) {
-                        return a.filter(function(i) {return b.indexOf(i) < 0;});
-                    };
-
-                    let notSelected = diff(roles.name, userRole.name);
-
-                    let options = '';
-
-                    for (var i = 0; i < notSelected.length; i++) {
-                        options += $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", ""));
+                    for (var i = 0; i < roles.length; i++) {
+                        $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("#euRoles");
                     }
-                    for (var i = 0; i < userRole.length; i++) {
-                        options += $('<option>').attr({ name: "name", selected: true, value: roles[i].id }).text(roles[i].name.replace("ROLE_", ""));
-                    }
-                    // options.appendTo("#editModal select");
-                    return options;
                 })
             }
 
@@ -173,9 +158,9 @@
                     var button = $(event.relatedTarget)
                     var usr = button.data('user')
                     console.log(usr.roles);
-                    let options = getAllRolesWithParam(usr.roles);
+                    // let options = '';
                     // for (var i = 0; i < usr.roles.length; i++) {
-                    //     options += '<option>' + usr.roles[i].name.replace("ROLE_", "") + '</option>';
+                    //     options += '<option>' + roles[i].name.replace("ROLE_", "") + '</option>';
                     // }
                     var modal = $(this)
                     modal.find('.modal-title').text('Edit user')
@@ -184,8 +169,8 @@
                     modal.find('.modal-body #euLastName').val(usr.lastName)
                     modal.find('.modal-body #euAge').val(usr.age)
                     modal.find('.modal-body #euEmail').val(usr.email)
-                    modal.find('.modal-body #euPwd').val()
-                    modal.find('.modal-body #euRoles').html(options)
+                    // modal.find('.modal-body #euPwd').val()
+                    modal.find('.modal-body #euRoles').html()
                 })
 
 
@@ -205,13 +190,12 @@
                         $('<input>').attr({ id: "euPwd", type: "password", name: "password", 'required': true }),
                         $('<p>').text('Роль:'),
                         $('<p>').append(
-                            $('<select>').prop({ id: "euRoles", 'multiple': true, size: "3", name: "roles", 'required': true }).append(
-                                // Необходимо получить весь список ролей, и выделить роли пользователя для правки, только роли пользователя для удаления
-                                // options
-                            )
+                            $('<select>').prop({ id: "euRoles", 'multiple': true, size: "3", name: "roles", 'required': true })
                         )
                     )
                 ).appendTo("#editModal div[class='modal-body']");
+
+
             }
 
             function modalEdit($) {
@@ -255,80 +239,6 @@
                     // обновить таблицу ...
 
             }
-
-            // function modalEdit(user, allRoles, form) {
-            //
-            //    let options = '';
-            //
-            //     if(form == "edit") {
-            //         formName = "edit_";
-            //         formTitle = "Edit user";
-            //         ariaLabelledby = "exampleModalLabel";
-            //         idModalTitle = "exampleModalLabel";
-            //         requestMethod = "patch";
-            //         buttomClass =  "btn-primary";
-            //         buttomValue = "Save";
-            //         fieldReadonly = false;
-            //         getAllRoles($);
-            //         prefix = "edit-";
-            //         sub = '';//sendFormUpdateUser(user);
-            //     }
-            //     if(form == "delete") {
-            //         formName = "delete_";
-            //         formTitle = "Delete user";
-            //         ariaLabelledby = "userDeleteModalLabel";
-            //         idModalTitle = "userDeleteModalLabel";
-            //         requestMethod = "delete";
-            //         buttomClass = "btn-danger";
-            //         buttomValue = "Delete";
-            //         fieldReadonly = true;
-            //         prefix = "del-";
-            //         sub = '';
-            //         for(var i=0; i<user.roles.length; i++){
-            //             options += '<option>' + user.roles[i].name.replace("ROLE_", "") + '</option>';
-            //         }
-            //     }
-            //     $('<div>').attr({ class: "modal fade", id: formName + user.id, tabIndex: "-1", role: "dialog", 'aria-labelledby': ariaLabelledby, 'aria-hidden': "true" }).append(
-            //         $('<div>').attr({ class: "modal-dialog", role: "document" }).append(
-            //             $('<div>').attr({ class: "modal-content" }).append(
-            //                 $('<div>').attr({ class: "modal-header" }).append(
-            //                     $('<h5>').attr({ class: "modal-title", id:  idModalTitle }).text( formTitle ),
-            //                     $('<buttom>').attr({ type: "button", class: "close", 'data-dismiss': "modal", 'aria-label': "Close" }).append(
-            //                         $('<span>').attr({ 'aria-hidden': "true" }).html('&#215;')
-            //                     )
-            //                 ),
-            //                 $('<form>').attr({ id: prefix+user.id }).append( // method: requestMethod, action: "/admin/users/"+user.id
-            //                     // $('<input>').attr({}), // hidden _method: patch or REST
-            //                     $('<div>').attr({ class: "modal-body text-center" }).append(
-            //                         $('<p>').text('ID:'),
-            //                         $('<input>').attr({ type: "text",  name: "name", value: user.id, 'readonly': true }),
-            //                         $('<p>').text('Имя:'),
-            //                         $('<input>').attr({ type: "text",  name: "firstname", value: user.firstName, 'readonly': fieldReadonly }),
-            //                         $('<p>').text('Фамилия:'),
-            //                         $('<input>').attr({ type: "text",  name: "lastname", value: user.lastName, 'readonly': fieldReadonly }),
-            //                         $('<p>').text('Возраст:'),
-            //                         $('<input>').attr({ type: "number", step: "1", name: "age", value: user.age, 'readonly': fieldReadonly }),
-            //                         $('<p>').text('E-mail:'),
-            //                         $('<input>').attr({ type: "email",  name: "email", value: user.email, 'readonly': fieldReadonly }),
-            //                         $('<p>').text('Пароль:'),
-            //                         $('<input>').attr({ type: "password",  name: "password", 'readonly': fieldReadonly }),
-            //                         $('<p>').text('Роль:'),
-            //                         $('<p>').append(
-            //                             $('<select>').prop({ id: user.id, 'multiple': true, size: "3", name: "addrole", 'readonly': fieldReadonly }).append(
-            //                             // Необходимо получить весь список ролей, и выделить роли пользователя для правки, только роли пользователя для удаления
-            //                                 options
-            //                             )
-            //                         ),
-            //                     ),
-            //                     $('<div>').attr({ class: "modal-footer" }).append(
-            //                         $('<button>').attr({ type: "button", class: "btn btn-secondary", 'data-dismiss': "modal" }).text('Close'),
-            //                         $('<input>').attr({ class: "btn " + buttomClass, type: "submit", value: buttomValue }).submit(DeleteUser(user))//((form=='delete')?DeleteUser(user):sendFormUpdateUser(user))
-            //                     )
-            //                 )
-            //             )
-            //         )
-            //     ).appendTo("#mod-del");
-            // }
 
             /***********************************
              *
@@ -405,6 +315,7 @@
                     createNewUserJson($data);
                     $('#createUserForm').empty();
                     addNewUser($);
+                    $('.nav-tabs li:first-child a').tab('show')
                 });
                 listUsers($); // не подгружает обновленный список
             }
@@ -428,44 +339,33 @@
                         }
                     })
             }
-            // function DeleteUser(user) {
-            //     $("#deleteModal form").submit(function (e) {
-            //         e.preventDefault();
-            //
-            //         DeleteUserJson(user.id);
-            //         $(".modal").modal("hide");
-            //         listUsers($);
-            //     });
-            // }
+
             /***********************************
              *
              *           UPDATE USER
              *
              ***********************************/
 
-            // function updatedUserJson(editUserFormData) {
-            //
-            //     console.log("Привет из createNewUserJson");
-            //     console.log("Данные:" +  JSON.stringify(newUserFormData));
-            //
-            //     return fetch('http://localhost:8088/admin/users/update/user', {
-            //         method: 'POST',
-            //         headers: {
-            //             // 'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
-            //             // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
-            //             'Content-Type': 'application/json;charset=utf-8'
-            //         },
-            //
-            //         body: JSON.stringify(editUserFormData)
-            //     })
-            //         .then(response => {
-            //             if(response.ok){
-            //                 return response.json()
-            //             } else {
-            //                 throw Error
-            //             }
-            //         })
-            // }
+            function updatedUserJson(editUserFormData) {
+
+                return fetch('http://localhost:8088/admin/users/update/user', {
+                    method: 'POST',
+                    headers: {
+                        // 'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
+                        // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+
+                    body: JSON.stringify(editUserFormData)
+                })
+                    .then(response => {
+                        if(response.ok){
+                            return response.json()
+                        } else {
+                            throw Error
+                        }
+                    })
+            }
             //
             // function sendFormUpdateUser(user) {
             //
@@ -496,7 +396,7 @@
             //     listUsers($); // не подгружает обновленный список
             // }
 
-            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser ).ready(profile).ready(modalDel).ready( modalEdit );
+            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser ).ready(profile).ready(modalDel).ready( modalEdit ).ready(getAllRolesWithParam);
         </script>
 <!--        <script th:src="@{/js/deleteUser.js}"></script>-->
     </th:block>
