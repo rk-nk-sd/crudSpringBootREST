@@ -6,21 +6,9 @@
     </div>
 
     <th:block th:fragment="script">
-<!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
-<!--        <script th:src="@{/js/bootstrap.min.js}"></script>-->
 
-        <!-- Optional JavaScript; choose one of the two! -->
-
-        <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!--        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
-        <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
-        -->
 
 
             <script th:src="@{/js/my.js}"></script>
@@ -31,84 +19,10 @@
                     $("[id ^= 'edit_'] select").empty();
                     $("#list-new-user select").empty();
                     for (var i = 0; i < roles.length; i++) {
-                        $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("[id ^= 'edit_'] select");
+                        // $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("#editModal select");
                         $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("#list-new-user select");
                     }
                 })
-            }
-
-            function modalEdit(user, allRoles, form) {
-
-               let options = '';
-
-                if(form == "edit") {
-                    formName = "edit_";
-                    formTitle = "Edit user";
-                    ariaLabelledby = "exampleModalLabel";
-                    idModalTitle = "exampleModalLabel";
-                    requestMethod = "patch";
-                    buttomClass =  "btn-primary";
-                    buttomValue = "Save";
-                    fieldReadonly = false;
-                    getAllRoles($);
-                    prefix = "edit-";
-                    sub = '';//sendFormUpdateUser(user);
-                }
-                if(form == "delete") {
-                    formName = "delete_";
-                    formTitle = "Delete user";
-                    ariaLabelledby = "userDeleteModalLabel";
-                    idModalTitle = "userDeleteModalLabel";
-                    requestMethod = "delete";
-                    buttomClass = "btn-danger";
-                    buttomValue = "Delete";
-                    fieldReadonly = true;
-                    prefix = "del-";
-                    sub = '';
-                    for(var i=0; i<user.roles.length; i++){
-                        options += '<option>' + user.roles[i].name.replace("ROLE_", "") + '</option>';
-                    }
-                }
-                $('<div>').attr({ class: "modal fade", id: formName + user.id, tabIndex: "-1", role: "dialog", 'aria-labelledby': ariaLabelledby, 'aria-hidden': "true" }).append(
-                    $('<div>').attr({ class: "modal-dialog", role: "document" }).append(
-                        $('<div>').attr({ class: "modal-content" }).append(
-                            $('<div>').attr({ class: "modal-header" }).append(
-                                $('<h5>').attr({ class: "modal-title", id:  idModalTitle }).text( formTitle ),
-                                $('<buttom>').attr({ type: "button", class: "close", 'data-dismiss': "modal", 'aria-label': "Close" }).append(
-                                    $('<span>').attr({ 'aria-hidden': "true" }).html('&#215;')
-                                )
-                            ),
-                            $('<form>').attr({ id: prefix+user.id }).append( // method: requestMethod, action: "/admin/users/"+user.id
-                                // $('<input>').attr({}), // hidden _method: patch or REST
-                                $('<div>').attr({ class: "modal-body text-center" }).append(
-                                    $('<p>').text('ID:'),
-                                    $('<input>').attr({ type: "text",  name: "name", value: user.id, 'readonly': true }),
-                                    $('<p>').text('Имя:'),
-                                    $('<input>').attr({ type: "text",  name: "firstname", value: user.firstName, 'readonly': fieldReadonly }),
-                                    $('<p>').text('Фамилия:'),
-                                    $('<input>').attr({ type: "text",  name: "lastname", value: user.lastName, 'readonly': fieldReadonly }),
-                                    $('<p>').text('Возраст:'),
-                                    $('<input>').attr({ type: "number", step: "1", name: "age", value: user.age, 'readonly': fieldReadonly }),
-                                    $('<p>').text('E-mail:'),
-                                    $('<input>').attr({ type: "email",  name: "email", value: user.email, 'readonly': fieldReadonly }),
-                                    $('<p>').text('Пароль:'),
-                                    $('<input>').attr({ type: "password",  name: "password", 'readonly': fieldReadonly }),
-                                    $('<p>').text('Роль:'),
-                                    $('<p>').append(
-                                        $('<select>').prop({ id: user.id, 'multiple': true, size: "3", name: "addrole", 'readonly': fieldReadonly }).append(
-                                        // Необходимо получить весь список ролей, и выделить роли пользователя для правки, только роли пользователя для удаления
-                                            options
-                                        )
-                                    ),
-                                ),
-                                $('<div>').attr({ class: "modal-footer" }).append(
-                                    $('<button>').attr({ type: "button", class: "btn btn-secondary", 'data-dismiss': "modal" }).text('Close'),
-                                    $('<input>').attr({ class: "btn " + buttomClass, type: "submit", value: buttomValue }).submit(DeleteUser(user))//((form=='delete')?DeleteUser(user):sendFormUpdateUser(user))
-                                )
-                            )
-                        )
-                    )
-                ).appendTo("#mod-del");
             }
 
             function listUsers($) {
@@ -128,8 +42,8 @@
                                 $("<td></td>").text( users[i].age ),
                                 $("<td></td>").text( users[i].email ),
                                 $("<td></td>").text( userRole ),//.prop( {id: role} ),
-                                $("<td id='edit'></td>").append( buttonEditUser(users[i]), modalEdit(users[i], users[i].roles, "edit") ), //функция с параметрами (users[i], userRole)
-                                $("<td></td>").append( buttonDeleteUser(users[i]), modalEdit(users[i], users[i].roles, "delete") ) //функция с параметрами (users[i], userRole),
+                                $("<td></td>").append( buttonEditUser(users[i]).click(editUser()) ), //функция с параметрами (users[i], userRole), modalEdit(users[i], users[i].roles, "edit")
+                                $("<td></td>").append( buttonDeleteUser(users[i]).click(deleteUser()) )
                             ).appendTo('#allUsersTable');
                         }
                     })
@@ -138,6 +52,283 @@
                     });
 
             }
+
+            /***********************************
+             *
+             *           MODAL
+             *
+             ***********************************/
+
+            //
+            // MODAL FOR DELETE USER
+            //
+
+            function deleteUser() {
+
+                $("#deleteModal form").empty();
+
+                $('#deleteModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget)
+                    var usr = button.data('user')
+                    let options = '';
+                    for (var i = 0; i < usr.roles.length; i++) {
+                        options += '<option>' + usr.roles[i].name.replace("ROLE_", "") + '</option>';
+                    }
+                    var modal = $(this)
+                    modal.find('.modal-title').text('Delete user')
+                    modal.find('.modal-body #duId').val(usr.id)
+                    modal.find('.modal-body #duFirstName').val(usr.firstName)
+                    modal.find('.modal-body #duLastName').val(usr.lastName)
+                    modal.find('.modal-body #duAge').val(usr.age)
+                    modal.find('.modal-body #duEmail').val(usr.email)
+                    modal.find('.modal-body #duPwd').val(usr.password)
+                    modal.find('.modal-body #duRoles').html(options)
+
+                })
+
+
+                $('<form>').attr({  }).append(
+                    $('<div>').attr({ class: "modal-body text-center" }).append(
+                        $('<p>').text('ID:'),
+                        $('<input>').attr({ id: "duId", type: "text", name: "name", 'readonly': true }),
+                        $('<p>').text('Имя:'),
+                        $('<input>').attr({ id: "duFirstName", type: "text", name: "firstname", 'readonly': true }),
+                        $('<p>').text('Фамилия:'),
+                        $('<input>').attr({ id: "duLastName", type: "text", name: "lastname", 'readonly': true }),
+                        $('<p>').text('Возраст:'),
+                        $('<input>').attr({ id: "duAge", type: "number", step: "1", name: "age", 'readonly': true }),
+                        $('<p>').text('E-mail:'),
+                        $('<input>').attr({ id: "duEmail", type: "email", name: "email", 'readonly': true }),
+                        $('<p>').text('Пароль:'),
+                        $('<input>').attr({ id: "duPwd", type: "password", name: "password", 'readonly': true }),
+                        $('<p>').text('Роль:'),
+                        $('<p>').append(
+                            $('<select>').prop({ id: "duRoles", 'multiple': true, size: "3", name: "addrole", 'readonly': true })
+                        )
+                    )
+                ).appendTo("#deleteModal div[class='modal-body']");
+            }
+
+            function modalDel($) {
+                $('<div>').attr({ class: "modal fade", id: "deleteModal", tabindex: "-1", 'aria-labelledby': "deleteModalLabel", 'aria-hidden': "true" }).append(
+                    $('<div>').attr({ class: "modal-dialog" }).append(
+                        $('<div>').attr({ class: "modal-content" }).append(
+                            $('<div>').attr({ class: "modal-header" }).append(
+                                $('<h5>').attr({ class: "modal-title", id: "deleteModalLabel" }).text("Delete user"),
+                                $('<button>').attr({ type: "button", class: "close", 'data-dismiss': "modal", 'aria-label': "Close" }).append(
+                                    $('<span>').attr({ 'aria-hidden': "true" }).html('&times;')
+                                )
+                            ),
+                            $('<div>').attr({ class: "modal-body" }),
+                            $('<div>').attr({ class: "modal-footer" }).append(
+                                $('<button>').attr({ type: "button", class: "btn btn-secondary", 'data-dismiss': "modal" }).text('Close'),
+                                $('<input>').attr({ type: "submit", class: "btn btn-danger", value: "Delete user" }).on('click', eventButtonDelete )
+                            )
+                        )
+                    )
+                ).appendTo("#mod-del");
+            }
+
+            function eventButtonDelete() {
+                var id = $('#deleteModal').find('.modal-body #duId').val();
+                if(id != null && id != undefined) {
+                    DeleteUserJson(id);
+                    $('#deleteModal').modal("toggle");
+                    // обновить таблицу ...
+                }
+            }
+
+            //
+            // MODAL FOR EDIT USER
+            //
+            function getAllRolesWithParam(userRole) {
+                getAllRolesJson($).then(function (roles) {
+                    // $("[id ^= 'edit_'] select").empty();
+                    $("#editModal select").empty();
+
+                    function diff(a, b) {
+                        return a.filter(function(i) {return b.indexOf(i) < 0;});
+                    };
+
+                    let notSelected = diff(roles.name, userRole.name);
+
+                    let options = '';
+
+                    for (var i = 0; i < notSelected.length; i++) {
+                        options += $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", ""));
+                    }
+                    for (var i = 0; i < userRole.length; i++) {
+                        options += $('<option>').attr({ name: "name", selected: true, value: roles[i].id }).text(roles[i].name.replace("ROLE_", ""));
+                    }
+                    // options.appendTo("#editModal select");
+                    return options;
+                })
+            }
+
+            function editUser() {
+
+                $("#editModal form").empty();
+
+                $('#editModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget)
+                    var usr = button.data('user')
+                    console.log(usr.roles);
+                    let options = getAllRolesWithParam(usr.roles);
+                    // for (var i = 0; i < usr.roles.length; i++) {
+                    //     options += '<option>' + usr.roles[i].name.replace("ROLE_", "") + '</option>';
+                    // }
+                    var modal = $(this)
+                    modal.find('.modal-title').text('Edit user')
+                    modal.find('.modal-body #euId').val(usr.id)
+                    modal.find('.modal-body #euFirstName').val(usr.firstName)
+                    modal.find('.modal-body #euLastName').val(usr.lastName)
+                    modal.find('.modal-body #euAge').val(usr.age)
+                    modal.find('.modal-body #euEmail').val(usr.email)
+                    modal.find('.modal-body #euPwd').val()
+                    modal.find('.modal-body #euRoles').html(options)
+                })
+
+
+                $('<form>').attr({  }).append(
+                    $('<div>').attr({ class: "modal-body text-center" }).append(
+                        $('<p>').text('ID:'),
+                        $('<input>').attr({ id: "euId", type: "text", name: "name", 'readonly': true }),
+                        $('<p>').text('Имя:'),
+                        $('<input>').attr({ id: "euFirstName", type: "text", name: "firstname", 'required': true }),
+                        $('<p>').text('Фамилия:'),
+                        $('<input>').attr({ id: "euLastName", type: "text", name: "lastname", 'required': true }),
+                        $('<p>').text('Возраст:'),
+                        $('<input>').attr({ id: "euAge", type: "number", step: "1", name: "age", 'required': true }),
+                        $('<p>').text('E-mail:'),
+                        $('<input>').attr({ id: "euEmail", type: "email", name: "email", 'required': true }),
+                        $('<p>').text('Пароль:'),
+                        $('<input>').attr({ id: "euPwd", type: "password", name: "password", 'required': true }),
+                        $('<p>').text('Роль:'),
+                        $('<p>').append(
+                            $('<select>').prop({ id: "euRoles", 'multiple': true, size: "3", name: "roles", 'required': true }).append(
+                                // Необходимо получить весь список ролей, и выделить роли пользователя для правки, только роли пользователя для удаления
+                                // options
+                            )
+                        )
+                    )
+                ).appendTo("#editModal div[class='modal-body']");
+            }
+
+            function modalEdit($) {
+                $('<div>').attr({ class: "modal fade", id: "editModal", tabindex: "-1", 'aria-labelledby': "editModalLabel", 'aria-hidden': "true" }).append(
+                    $('<div>').attr({ class: "modal-dialog" }).append(
+                        $('<div>').attr({ class: "modal-content" }).append(
+                            $('<div>').attr({ class: "modal-header" }).append(
+                                $('<h5>').attr({ class: "modal-title", id: "editModalLabel" }).text("Edit user"),
+                                $('<button>').attr({ type: "button", class: "close", 'data-dismiss': "modal", 'aria-label': "Close" }).append(
+                                    $('<span>').attr({ 'aria-hidden': "true" }).html('&times;')
+                                )
+                            ),
+                            $('<div>').attr({ class: "modal-body" }),
+                            $('<div>').attr({ class: "modal-footer" }).append(
+                                $('<button>').attr({ type: "button", class: "btn btn-secondary", 'data-dismiss': "modal" }).text('Close'),
+                                $('<input>').attr({ type: "submit", class: "btn btn-primary", value: "Update user" }).on('click', eventButtonEdit )
+                            )
+                        )
+                    )
+                ).appendTo("#mod-edit");
+            }
+
+            function eventButtonEdit() {
+                var $data = {};
+                let listUserRoles = [];
+                $('#editModal').find('input[type!="submit"], select').each(function() {
+
+                    if( this.name === "roles" ) {
+                        for(var i=0; i<$(this).val().length; i++){
+                            listUserRoles[i] = { "id": this[i].value }
+                        }
+                    }
+
+                    $data[this.name] = $(this).val();
+
+                });
+
+                $data['roles'] = listUserRoles;
+                console.log(JSON.stringify($data));
+                    // $('#editModal').modal("toggle");
+                    // обновить таблицу ...
+
+            }
+
+            // function modalEdit(user, allRoles, form) {
+            //
+            //    let options = '';
+            //
+            //     if(form == "edit") {
+            //         formName = "edit_";
+            //         formTitle = "Edit user";
+            //         ariaLabelledby = "exampleModalLabel";
+            //         idModalTitle = "exampleModalLabel";
+            //         requestMethod = "patch";
+            //         buttomClass =  "btn-primary";
+            //         buttomValue = "Save";
+            //         fieldReadonly = false;
+            //         getAllRoles($);
+            //         prefix = "edit-";
+            //         sub = '';//sendFormUpdateUser(user);
+            //     }
+            //     if(form == "delete") {
+            //         formName = "delete_";
+            //         formTitle = "Delete user";
+            //         ariaLabelledby = "userDeleteModalLabel";
+            //         idModalTitle = "userDeleteModalLabel";
+            //         requestMethod = "delete";
+            //         buttomClass = "btn-danger";
+            //         buttomValue = "Delete";
+            //         fieldReadonly = true;
+            //         prefix = "del-";
+            //         sub = '';
+            //         for(var i=0; i<user.roles.length; i++){
+            //             options += '<option>' + user.roles[i].name.replace("ROLE_", "") + '</option>';
+            //         }
+            //     }
+            //     $('<div>').attr({ class: "modal fade", id: formName + user.id, tabIndex: "-1", role: "dialog", 'aria-labelledby': ariaLabelledby, 'aria-hidden': "true" }).append(
+            //         $('<div>').attr({ class: "modal-dialog", role: "document" }).append(
+            //             $('<div>').attr({ class: "modal-content" }).append(
+            //                 $('<div>').attr({ class: "modal-header" }).append(
+            //                     $('<h5>').attr({ class: "modal-title", id:  idModalTitle }).text( formTitle ),
+            //                     $('<buttom>').attr({ type: "button", class: "close", 'data-dismiss': "modal", 'aria-label': "Close" }).append(
+            //                         $('<span>').attr({ 'aria-hidden': "true" }).html('&#215;')
+            //                     )
+            //                 ),
+            //                 $('<form>').attr({ id: prefix+user.id }).append( // method: requestMethod, action: "/admin/users/"+user.id
+            //                     // $('<input>').attr({}), // hidden _method: patch or REST
+            //                     $('<div>').attr({ class: "modal-body text-center" }).append(
+            //                         $('<p>').text('ID:'),
+            //                         $('<input>').attr({ type: "text",  name: "name", value: user.id, 'readonly': true }),
+            //                         $('<p>').text('Имя:'),
+            //                         $('<input>').attr({ type: "text",  name: "firstname", value: user.firstName, 'readonly': fieldReadonly }),
+            //                         $('<p>').text('Фамилия:'),
+            //                         $('<input>').attr({ type: "text",  name: "lastname", value: user.lastName, 'readonly': fieldReadonly }),
+            //                         $('<p>').text('Возраст:'),
+            //                         $('<input>').attr({ type: "number", step: "1", name: "age", value: user.age, 'readonly': fieldReadonly }),
+            //                         $('<p>').text('E-mail:'),
+            //                         $('<input>').attr({ type: "email",  name: "email", value: user.email, 'readonly': fieldReadonly }),
+            //                         $('<p>').text('Пароль:'),
+            //                         $('<input>').attr({ type: "password",  name: "password", 'readonly': fieldReadonly }),
+            //                         $('<p>').text('Роль:'),
+            //                         $('<p>').append(
+            //                             $('<select>').prop({ id: user.id, 'multiple': true, size: "3", name: "addrole", 'readonly': fieldReadonly }).append(
+            //                             // Необходимо получить весь список ролей, и выделить роли пользователя для правки, только роли пользователя для удаления
+            //                                 options
+            //                             )
+            //                         ),
+            //                     ),
+            //                     $('<div>').attr({ class: "modal-footer" }).append(
+            //                         $('<button>').attr({ type: "button", class: "btn btn-secondary", 'data-dismiss': "modal" }).text('Close'),
+            //                         $('<input>').attr({ class: "btn " + buttomClass, type: "submit", value: buttomValue }).submit(DeleteUser(user))//((form=='delete')?DeleteUser(user):sendFormUpdateUser(user))
+            //                     )
+            //                 )
+            //             )
+            //         )
+            //     ).appendTo("#mod-del");
+            // }
 
             /***********************************
              *
@@ -237,75 +428,75 @@
                         }
                     })
             }
-            function DeleteUser(user) {
-                $('form[id="del-'+user.id+'"]').submit(function (e) {
-                    e.preventDefault();
-
-                    DeleteUserJson(user.id);
-                    $(".modal").modal("hide");
-                    listUsers($);
-                });
-            }
+            // function DeleteUser(user) {
+            //     $("#deleteModal form").submit(function (e) {
+            //         e.preventDefault();
+            //
+            //         DeleteUserJson(user.id);
+            //         $(".modal").modal("hide");
+            //         listUsers($);
+            //     });
+            // }
             /***********************************
              *
              *           UPDATE USER
              *
              ***********************************/
 
-            function updatedUserJson(editUserFormData) {
+            // function updatedUserJson(editUserFormData) {
+            //
+            //     console.log("Привет из createNewUserJson");
+            //     console.log("Данные:" +  JSON.stringify(newUserFormData));
+            //
+            //     return fetch('http://localhost:8088/admin/users/update/user', {
+            //         method: 'POST',
+            //         headers: {
+            //             // 'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
+            //             // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
+            //             'Content-Type': 'application/json;charset=utf-8'
+            //         },
+            //
+            //         body: JSON.stringify(editUserFormData)
+            //     })
+            //         .then(response => {
+            //             if(response.ok){
+            //                 return response.json()
+            //             } else {
+            //                 throw Error
+            //             }
+            //         })
+            // }
+            //
+            // function sendFormUpdateUser(user) {
+            //
+            //     $("#edit-"+user.id).submit(function (e) {
+            //         e.preventDefault();
+            //
+            //         var $data = {};
+            //         let listUsers = [];
+            //         $("#edit-"+user.id).find('input[type!="submit"], select').each(function() {
+            //
+            //             if( this.name === "roles" ) {
+            //                 for(var i=0; i<$(this).val().length; i++){
+            //                     listUsers[i] = { "id": this[i].value }
+            //                 }
+            //             }
+            //
+            //             $data[this.name] = $(this).val();
+            //
+            //         });
+            //
+            //         $data['roles'] = listUsers;
+            //
+            //         updatedUserJson($data);
+            //         $(".modal").modal("hide");
+            //         // $('#edit-"+user.id').empty();
+            //         // addNewUser($);
+            //     });
+            //     listUsers($); // не подгружает обновленный список
+            // }
 
-                console.log("Привет из createNewUserJson");
-                console.log("Данные:" +  JSON.stringify(newUserFormData));
-
-                return fetch('http://localhost:8088/admin/users/update/user', {
-                    method: 'POST',
-                    headers: {
-                        // 'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
-                        // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
-                        'Content-Type': 'application/json;charset=utf-8'
-                    },
-
-                    body: JSON.stringify(editUserFormData)
-                })
-                    .then(response => {
-                        if(response.ok){
-                            return response.json()
-                        } else {
-                            throw Error
-                        }
-                    })
-            }
-
-            function sendFormUpdateUser(user) {
-
-                $("#edit-"+user.id).submit(function (e) {
-                    e.preventDefault();
-
-                    var $data = {};
-                    let listUsers = [];
-                    $("#edit-"+user.id).find('input[type!="submit"], select').each(function() {
-
-                        if( this.name === "roles" ) {
-                            for(var i=0; i<$(this).val().length; i++){
-                                listUsers[i] = { "id": this[i].value }
-                            }
-                        }
-
-                        $data[this.name] = $(this).val();
-
-                    });
-
-                    $data['roles'] = listUsers;
-
-                    updatedUserJson($data);
-                    $(".modal").modal("hide");
-                    // $('#edit-"+user.id').empty();
-                    // addNewUser($);
-                });
-                listUsers($); // не подгружает обновленный список
-            }
-
-            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser ).ready(profile).ready(modalDel);
+            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser ).ready(profile).ready(modalDel).ready( modalEdit );
         </script>
 <!--        <script th:src="@{/js/deleteUser.js}"></script>-->
     </th:block>

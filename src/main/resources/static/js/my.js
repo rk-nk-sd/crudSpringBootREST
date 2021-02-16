@@ -131,10 +131,17 @@ function buttonDeleteUser(user) {
         type: "button",
         class: "btn btn-danger",
         'data-toggle': "modal",
-        'data-target': '#delete_' + user.id
+        'data-target': '#deleteModal'
     }).data({
-        toogle: "modal",
-        target: '#delete_' + user.id
+        user: {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            age: user.age,
+            email: user.email,
+            password: user.password,
+            roles: user.roles
+        }
     }).text('Удалить');
 }
 
@@ -143,10 +150,17 @@ function buttonEditUser(user) {
         type: "button",
         class: "btn btn-info",
         'data-toggle': "modal",
-        'data-target': '#edit_' + user.id
+        'data-target': '#editModal'
     }).data({
-        toogle: "modal",
-        target: '#edit_' + user.id
+        user: {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            age: user.age,
+            email: user.email,
+            password: user.password,
+            roles: user.roles
+        }
     }).text('Изменить');
 }
 
