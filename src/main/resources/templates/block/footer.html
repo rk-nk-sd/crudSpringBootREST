@@ -16,38 +16,38 @@
         <script>
             function getAllRoles($){
                 getAllRolesJson($).then(function (roles) {
-                    // // $("#editModal select").empty();
                     $("#list-new-user select").empty();
                     for (var i = 0; i < roles.length; i++) {
-                        // $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("#editModal select");
                         $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("#list-new-user select");
                     }
                 })
             }
 
+            function table(users) {
+                $('#allUsersTable').empty();
+                for (var i = 0; i < users.length; i++) {
+                    let userRole = users[i].roles.map(
+                        function (role) {
+                            return " " + role.name.replace("ROLE_", "")
+                        });
+                    $('<tr></tr>').append(
+                        $("<th></th>").text(users[i].id),
+                        $("<td></td>").text(users[i].firstName),
+                        $("<td></td>").text(users[i].lastName),
+                        $("<td></td>").text(users[i].age),
+                        $("<td></td>").text(users[i].email),
+                        $("<td></td>").text(userRole),//.prop( {id: role} ),
+                        $("<td></td>").append(buttonEditUser(users[i]).click(editUser())), //функция с параметрами (users[i], userRole), modalEdit(users[i], users[i].roles, "edit")
+                        $("<td></td>").append(buttonDeleteUser(users[i]).click(deleteUser()))
+                    ).appendTo('#allUsersTable');
+                }
+            }
+
             function listUsers($) {
                 getAllUsersJson( jQuery )
-                    .then(function(users)
-                    {
-                        console.log("Работает функция ListUsers")
-                        $('#allUsersTable').empty();
-                        for(var i=0; i < users.length; i++ ){
-                            let userRole = users[i].roles.map(
-                                function (role) {
-                                    return " " + role.name.replace("ROLE_", "")
-                                });
-                            $('<tr></tr>').append(
-                                $("<th></th>").text( users[i].id ),
-                                $("<td></td>").text( users[i].firstName ),
-                                $("<td></td>").text( users[i].lastName ),
-                                $("<td></td>").text( users[i].age ),
-                                $("<td></td>").text( users[i].email ),
-                                $("<td></td>").text( userRole ),//.prop( {id: role} ),
-                                $("<td></td>").append( buttonEditUser(users[i]).click(editUser()) ), //функция с параметрами (users[i], userRole), modalEdit(users[i], users[i].roles, "edit")
-                                $("<td></td>").append( buttonDeleteUser(users[i]).click(deleteUser()) )
-                            ).appendTo('#allUsersTable');
-                        }
-                    })
+                    .then((data) =>
+                        table(data)
+                    )
                     .catch(function(err){
                         console.log(err.message); //выведет сообщение "не удалось выполнить..."
                     });
@@ -67,26 +67,6 @@
             function deleteUser() {
 
                 $("#deleteModal form").empty();
-
-                $('#deleteModal').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget)
-                    var usr = button.data('user')
-                    let options = '';
-                    for (var i = 0; i < usr.roles.length; i++) {
-                        options += '<option>' + usr.roles[i].name.replace("ROLE_", "") + '</option>';
-                    }
-                    var modal = $(this)
-                    modal.find('.modal-title').text('Delete user')
-                    modal.find('.modal-body #duId').val(usr.id)
-                    modal.find('.modal-body #duFirstName').val(usr.firstName)
-                    modal.find('.modal-body #duLastName').val(usr.lastName)
-                    modal.find('.modal-body #duAge').val(usr.age)
-                    modal.find('.modal-body #duEmail').val(usr.email)
-                    modal.find('.modal-body #duPwd').val(usr.password)
-                    modal.find('.modal-body #duRoles').html(options)
-
-                })
-
 
                 $('<form>').attr({  }).append(
                     $('<div>').attr({ class: "modal-body text-center" }).append(
@@ -108,6 +88,25 @@
                         )
                     )
                 ).appendTo("#deleteModal div[class='modal-body']");
+
+                $('#deleteModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget)
+                    var usr = button.data('user')
+                    let options = '';
+                    for (var i = 0; i < usr.roles.length; i++) {
+                        options += '<option>' + usr.roles[i].name.replace("ROLE_", "") + '</option>';
+                    }
+                    var modal = $(this)
+                    modal.find('.modal-title').text('Delete user')
+                    modal.find('.modal-body #duId').val(usr.id)
+                    modal.find('.modal-body #duFirstName').val(usr.firstName)
+                    modal.find('.modal-body #duLastName').val(usr.lastName)
+                    modal.find('.modal-body #duAge').val(usr.age)
+                    modal.find('.modal-body #duEmail').val(usr.email)
+                    modal.find('.modal-body #duPwd').val(usr.password)
+                    modal.find('.modal-body #duRoles').html(options)
+
+                })
             }
 
             function modalDel($) {
@@ -135,6 +134,9 @@
                 if(id != null && id != undefined) {
                     DeleteUserJson(id);
                     $('#deleteModal').modal("toggle");
+                    getAllUsersJson(jQuery).then(function () {
+                        getAllUsersJson(jQuery).then((data) => table(data))
+                    });
                     // обновить таблицу ...
                 }
             }
@@ -150,8 +152,6 @@
                         options +='<option value="' + roles[i].id + '">' + roles[i].name.replace("ROLE_", "") + '</option>';
                     }
                     $('#editModal select').html(options);
-                    // console.log(options);
-
                 })
 
             }
@@ -159,25 +159,6 @@
             function editUser() {
 
                 $("#editModal form").empty();
-
-                $('#editModal').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget)
-                    var usr = button.data('user')
-                    // let options = '';
-                    // for (var i = 0; i < usr.roles.length; i++) {
-                    //     options += '<option selected value="' + usr.roles[i].id + '">' + usr.roles[i].name.replace("ROLE_", "") + '</option>';
-                    // }
-                    var modal = $(this)
-                    modal.find('.modal-title').text('Edit user')
-                    modal.find('.modal-body #euId').val(usr.id)
-                    modal.find('.modal-body #euFirstName').val(usr.firstName)
-                    modal.find('.modal-body #euLastName').val(usr.lastName)
-                    modal.find('.modal-body #euAge').val(usr.age)
-                    modal.find('.modal-body #euEmail').val(usr.email)
-                    // modal.find('.modal-body #euPwd').val()
-                    // modal.find('.modal-body #euRoles').html(getAllRolesWithParam($))
-                })
-
 
                 $('<form>').attr({  }).append(
                     $('<div>').attr({ class: "modal-body text-center" }).append(
@@ -199,7 +180,25 @@
                         )
                     )
                 ).appendTo("#editModal div[class='modal-body']");
+
                 getAllRolesWithParam($)
+
+                $('#editModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget)
+                    var usr = button.data('user')
+
+                    for (var i = 0; i < usr.roles.length; i++) {
+                        $('#editModal option[value=' + usr.roles[i].id + ']').attr({ selected: true });
+                    }
+                    var modal = $(this)
+                    modal.find('.modal-title').text('Edit user')
+                    modal.find('.modal-body #euId').val(usr.id)
+                    modal.find('.modal-body #euFirstName').val(usr.firstName)
+                    modal.find('.modal-body #euLastName').val(usr.lastName)
+                    modal.find('.modal-body #euAge').val(usr.age)
+                    modal.find('.modal-body #euEmail').val(usr.email)
+                    // modal.find('.modal-body #euPwd').val()
+                })
 
             }
 
@@ -239,11 +238,8 @@
                 });
 
                 $data['roles'] = listUserRoles;
-                console.log(JSON.stringify($data));
-                updatedUserJson($data);
+                updatedUserJson($data).then(function (){getAllUsersJson(jQuery).then((data) => table(data))});
                 $('#editModal').modal("toggle");
-                    // обновить таблицу ...
-
             }
 
             /***********************************
@@ -273,11 +269,7 @@
                 getAllRoles($);
             }
 
-            function createNewUserJson(newUserFormData) {
-
-                console.log("Привет из createNewUserJson");
-                console.log("Данные:" +  JSON.stringify(newUserFormData));
-
+            function createNewUserJson(user) {
                return fetch('http://localhost:8088/admin/users/create/user', {
                    method: 'POST',
                    headers: {
@@ -286,7 +278,7 @@
                        'Content-Type': 'application/json;charset=utf-8'
                    },
 
-                   body: JSON.stringify(newUserFormData)
+                   body: JSON.stringify(user)
                })
                    .then(response => {
                    if(response.ok){
@@ -318,13 +310,15 @@
 
                     $data['roles'] = listRoles;
 
-                    createNewUserJson($data);
                     $('#createUserForm').empty();
                     addNewUser($);
-                    $('.nav-tabs li:first-child a').tab('show')
-                    listUsers($);
+                    createNewUserJson($data);
+                    $('.nav-tabs li:first-child a').tab('show');
+                    getAllUsersJson(jQuery).then(function () {
+                        getAllUsersJson(jQuery).then((data) => table(data))
+                    });
+
                 });
-                 // не подгружает обновленный список
             }
 
             /***********************************
@@ -334,7 +328,6 @@
              ***********************************/
 
             function DeleteUserJson(id) {
-                console.log("Функция DeleteUserJson, переданный параметр: "+id);
                 return fetch('http://localhost:8088/admin/users/'+id, {
                     method: "delete"
                 })
@@ -354,13 +347,11 @@
              ***********************************/
 
             function updatedUserJson(user) {
-                console.log('http://localhost:8088/admin/users/'+user.id+'/edit');
-
                 return fetch('http://localhost:8088/admin/users/'+user.id+'/edit', {
                     method: 'PATCH',
                     headers: {
                         // 'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
-                        // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
+                        // 'Authorization': 'Basic '+btoa('admin@mail.ru:admin'),
                         'Content-Type': 'application/json;charset=utf-8'
                     },
 
@@ -374,39 +365,9 @@
                         }
                     })
             }
-            //
-            // function sendFormUpdateUser(user) {
-            //
-            //     $("#edit-"+user.id).submit(function (e) {
-            //         e.preventDefault();
-            //
-            //         var $data = {};
-            //         let listUsers = [];
-            //         $("#edit-"+user.id).find('input[type!="submit"], select').each(function() {
-            //
-            //             if( this.name === "roles" ) {
-            //                 for(var i=0; i<$(this).val().length; i++){
-            //                     listUsers[i] = { "id": this[i].value }
-            //                 }
-            //             }
-            //
-            //             $data[this.name] = $(this).val();
-            //
-            //         });
-            //
-            //         $data['roles'] = listUsers;
-            //
-            //         updatedUserJson($data);
-            //         $(".modal").modal("hide");
-            //         // $('#edit-"+user.id').empty();
-            //         // addNewUser($);
-            //     });
-            //     listUsers($); // не подгружает обновленный список
-            // }
 
             $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser ).ready(profile).ready(modalDel).ready( modalEdit );
         </script>
-<!--        <script th:src="@{/js/deleteUser.js}"></script>-->
     </th:block>
 
 </html>

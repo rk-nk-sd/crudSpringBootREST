@@ -103,7 +103,7 @@ function profile() {
 
 //GET ALL USERS
 function getAllUsersJson(jQuery) {
-    return fetch('http://localhost:8088/admin/users/getAllUsers')
+    return fetch('http://localhost:8088/admin/users/getAllUsers',{cache: "reload"})
         .then(response => {
             if(response.ok){
                 return response.json()

@@ -34,13 +34,6 @@ public class RestController {
         this.repository = repository;
     }
 
-//    @GetMapping()
-//    public ResponseEntity<List<User>> redirect() {
-//
-//        return ResponseEntity.ok(userService.getAllUsers());
-//
-////        return "Hello!";
-//    }
 
     //=============Role=============
 
@@ -66,18 +59,18 @@ public class RestController {
         return ResponseEntity.ok(roleService.getCurrentRole(id));
     }
 
-    @PostMapping("/admin/roles")
-    public String createUser (@ModelAttribute("role") @Valid Role role,
-                              BindingResult bindingResult,
-                              @RequestParam(name = "rolename") String rolename){
-        if(bindingResult.hasErrors())
-            return "admin/create_role";
-
-        role.setName(rolename);
-        roleService.createRole(role);
-
-        return "redirect:/admin/roles";
-    }
+//    @PostMapping("/admin/roles")
+//    public String createUser (@ModelAttribute("role") @Valid Role role,
+//                              BindingResult bindingResult,
+//                              @RequestParam(name = "rolename") String rolename){
+//        if(bindingResult.hasErrors())
+//            return "admin/create_role";
+//
+//        role.setName(rolename);
+//        roleService.createRole(role);
+//
+//        return "redirect:/admin/roles";
+//    }
 
     @PatchMapping("/admin/roles/{id}")
     public ResponseEntity<Role> update (@ModelAttribute("role") @Valid Role role){
@@ -107,32 +100,12 @@ public class RestController {
     public ResponseEntity<User> getCurrentUser(@PathVariable("id") int id) {
         return ResponseEntity.ok(userService.getCurrentUser(id));
     }
+
     @PostMapping("/users/get/by/email")
         public ResponseEntity<User> getUserByEmail(@RequestBody User user) {
         return ResponseEntity.ok(userService.findByUserEmail(user.getEmail()));
         }
 
-    //перенес
-//    @GetMapping("/users/new-user")
-//    public String createUserForm(@ModelAttribute("user") User user, Model model, Authentication authentication) {
-//        //Вернет html форму для создания нового пользователя
-//        model.addAttribute("userinfo", authentication);
-//        return "admin/create_user";
-//    }
-
-//    @GetMapping("/users/{id}/edit")
-//    public String editUser (Model model,@PathVariable("id") int id, Authentication authentication){
-//        //Вернет html форму для редактирования страницы пользователя
-//        model.addAttribute("user", userService.getCurrentUser(id));
-//        model.addAttribute("roles", roleService.getAllRole());
-//        model.addAttribute("userinfo", authentication);
-//        return "admin/edit_user";
-//    }
-
-//    @PostMapping("/users")
-//    public User createUser (@RequestBody User user) {
-//        return userService.addNewUser(user);
-//    }
     @PostMapping("/admin/users/create/user")
     public ResponseEntity<?> createUser (@RequestBody User _user) {
         User user = new User();
