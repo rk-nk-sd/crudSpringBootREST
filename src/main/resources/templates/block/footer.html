@@ -16,7 +16,7 @@
         <script>
             function getAllRoles($){
                 getAllRolesJson($).then(function (roles) {
-                    $("[id ^= 'edit_'] select").empty();
+                    // // $("#editModal select").empty();
                     $("#list-new-user select").empty();
                     for (var i = 0; i < roles.length; i++) {
                         // $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("#editModal select");
@@ -29,6 +29,7 @@
                 getAllUsersJson( jQuery )
                     .then(function(users)
                     {
+                        console.log("Работает функция ListUsers")
                         $('#allUsersTable').empty();
                         for(var i=0; i < users.length; i++ ){
                             let userRole = users[i].roles.map(
@@ -142,12 +143,17 @@
             // MODAL FOR EDIT USER
             //
             function getAllRolesWithParam($) {
-                getAllRolesJson($).then(function (roles) {
+                getAllRolesJson().then(function (roles) {
                     $("#editModal select").empty();
+                    let options = '';
                     for (var i = 0; i < roles.length; i++) {
-                        $('<option>').attr({ name: "name", value: roles[i].id }).text(roles[i].name.replace("ROLE_", "")).appendTo("#euRoles");
+                        options +='<option value="' + roles[i].id + '">' + roles[i].name.replace("ROLE_", "") + '</option>';
                     }
+                    $('#editModal select').html(options);
+                    // console.log(options);
+
                 })
+
             }
 
             function editUser() {
@@ -157,10 +163,9 @@
                 $('#editModal').on('show.bs.modal', function (event) {
                     var button = $(event.relatedTarget)
                     var usr = button.data('user')
-                    console.log(usr.roles);
                     // let options = '';
                     // for (var i = 0; i < usr.roles.length; i++) {
-                    //     options += '<option>' + roles[i].name.replace("ROLE_", "") + '</option>';
+                    //     options += '<option selected value="' + usr.roles[i].id + '">' + usr.roles[i].name.replace("ROLE_", "") + '</option>';
                     // }
                     var modal = $(this)
                     modal.find('.modal-title').text('Edit user')
@@ -170,18 +175,18 @@
                     modal.find('.modal-body #euAge').val(usr.age)
                     modal.find('.modal-body #euEmail').val(usr.email)
                     // modal.find('.modal-body #euPwd').val()
-                    modal.find('.modal-body #euRoles').html()
+                    // modal.find('.modal-body #euRoles').html(getAllRolesWithParam($))
                 })
 
 
                 $('<form>').attr({  }).append(
                     $('<div>').attr({ class: "modal-body text-center" }).append(
                         $('<p>').text('ID:'),
-                        $('<input>').attr({ id: "euId", type: "text", name: "name", 'readonly': true }),
+                        $('<input>').attr({ id: "euId", type: "text", name: "id", 'readonly': true }),
                         $('<p>').text('Имя:'),
-                        $('<input>').attr({ id: "euFirstName", type: "text", name: "firstname", 'required': true }),
+                        $('<input>').attr({ id: "euFirstName", type: "text", name: "firstName", 'required': true }),
                         $('<p>').text('Фамилия:'),
-                        $('<input>').attr({ id: "euLastName", type: "text", name: "lastname", 'required': true }),
+                        $('<input>').attr({ id: "euLastName", type: "text", name: "lastName", 'required': true }),
                         $('<p>').text('Возраст:'),
                         $('<input>').attr({ id: "euAge", type: "number", step: "1", name: "age", 'required': true }),
                         $('<p>').text('E-mail:'),
@@ -194,7 +199,7 @@
                         )
                     )
                 ).appendTo("#editModal div[class='modal-body']");
-
+                getAllRolesWithParam($)
 
             }
 
@@ -225,7 +230,7 @@
 
                     if( this.name === "roles" ) {
                         for(var i=0; i<$(this).val().length; i++){
-                            listUserRoles[i] = { "id": this[i].value }
+                            listUserRoles[i] = { "id": $(this).val()[i] }
                         }
                     }
 
@@ -235,7 +240,8 @@
 
                 $data['roles'] = listUserRoles;
                 console.log(JSON.stringify($data));
-                    // $('#editModal').modal("toggle");
+                updatedUserJson($data);
+                $('#editModal').modal("toggle");
                     // обновить таблицу ...
 
             }
@@ -297,12 +303,12 @@
                     e.preventDefault();
 
                     var $data = {};
-                    let listUsers = [];
+                    let listRoles = [];
                     $('#createUserForm').find('input[type!="submit"], select').each(function() {
 
                         if( this.name === "roles" ) {
                             for(var i=0; i<$(this).val().length; i++){
-                                listUsers[i] = { "id": this[i].value }
+                                listRoles[i] = { "id": $(this).val()[i] }
                             }
                         }
 
@@ -310,14 +316,15 @@
 
                     });
 
-                    $data['roles'] = listUsers;
+                    $data['roles'] = listRoles;
 
                     createNewUserJson($data);
                     $('#createUserForm').empty();
                     addNewUser($);
                     $('.nav-tabs li:first-child a').tab('show')
+                    listUsers($);
                 });
-                listUsers($); // не подгружает обновленный список
+                 // не подгружает обновленный список
             }
 
             /***********************************
@@ -346,17 +353,18 @@
              *
              ***********************************/
 
-            function updatedUserJson(editUserFormData) {
+            function updatedUserJson(user) {
+                console.log('http://localhost:8088/admin/users/'+user.id+'/edit');
 
-                return fetch('http://localhost:8088/admin/users/update/user', {
-                    method: 'POST',
+                return fetch('http://localhost:8088/admin/users/'+user.id+'/edit', {
+                    method: 'PATCH',
                     headers: {
                         // 'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
                         // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
                         'Content-Type': 'application/json;charset=utf-8'
                     },
 
-                    body: JSON.stringify(editUserFormData)
+                    body: JSON.stringify(user)
                 })
                     .then(response => {
                         if(response.ok){
@@ -396,7 +404,7 @@
             //     listUsers($); // не подгружает обновленный список
             // }
 
-            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser ).ready(profile).ready(modalDel).ready( modalEdit ).ready(getAllRolesWithParam);
+            $( document ).ready( authUserInfo ).ready( listUsers ).ready( addNewUser ).ready( sendFormCreateNewUser ).ready(profile).ready(modalDel).ready( modalEdit );
         </script>
 <!--        <script th:src="@{/js/deleteUser.js}"></script>-->
     </th:block>
