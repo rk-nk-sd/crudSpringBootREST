@@ -273,7 +273,7 @@
                return fetch('http://localhost:8088/admin/users/create/user', {
                    method: 'POST',
                    headers: {
-                       'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
+                       // 'Authorization': 'Basic dXNlckBtYWlsLnJ1OnVzZXI=',
                        // 'Authorization': 'Basic YWRtaW5AbWFpbC5ydTphZG1pbg==', //+btoa('admin@mail.ru:admin'),
                        'Content-Type': 'application/json;charset=utf-8'
                    },
@@ -317,7 +317,7 @@
                     getAllUsersJson(jQuery).then(function () {
                         getAllUsersJson(jQuery).then((data) => table(data))
                     });
-
+                    getAllUsersJson(jQuery).then((data) => table(data))
                 });
             }
 
