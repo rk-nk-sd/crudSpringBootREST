@@ -71,20 +71,20 @@
                 $('<form>').attr({  }).append(
                     $('<div>').attr({ class: "modal-body text-center" }).append(
                         $('<p>').text('ID:'),
-                        $('<input>').attr({ id: "duId", type: "text", name: "name", 'readonly': true }),
+                        $('<input>').attr({ id: "duId", type: "text", name: "name", class: "form-control", 'disabled': true }),
                         $('<p>').text('Имя:'),
-                        $('<input>').attr({ id: "duFirstName", type: "text", name: "firstname", 'readonly': true }),
+                        $('<input>').attr({ id: "duFirstName", type: "text", name: "firstname", class: "form-control", 'disabled': true }),
                         $('<p>').text('Фамилия:'),
-                        $('<input>').attr({ id: "duLastName", type: "text", name: "lastname", 'readonly': true }),
+                        $('<input>').attr({ id: "duLastName", type: "text", name: "lastname", class: "form-control", 'disabled': true }),
                         $('<p>').text('Возраст:'),
-                        $('<input>').attr({ id: "duAge", type: "number", step: "1", name: "age", 'readonly': true }),
+                        $('<input>').attr({ id: "duAge", type: "number", step: "1", name: "age", class: "form-control", 'disabled': true }),
                         $('<p>').text('E-mail:'),
-                        $('<input>').attr({ id: "duEmail", type: "email", name: "email", 'readonly': true }),
+                        $('<input>').attr({ id: "duEmail", type: "email", name: "email", class: "form-control", 'disabled': true }),
                         $('<p>').text('Пароль:'),
-                        $('<input>').attr({ id: "duPwd", type: "password", name: "password", 'readonly': true }),
+                        $('<input>').attr({ id: "duPwd", type: "password", name: "password", class: "form-control", 'disabled': true }),
                         $('<p>').text('Роль:'),
                         $('<p>').append(
-                            $('<select>').prop({ id: "duRoles", 'multiple': true, size: "3", name: "addrole", 'readonly': true })
+                            $('<select>').prop({ id: "duRoles", 'multiple': true, size: "3", name: "addrole", class: "form-control", 'disabled': true })
                         )
                     )
                 ).appendTo("#deleteModal div[class='modal-body']");
@@ -163,20 +163,20 @@
                 $('<form>').attr({  }).append(
                     $('<div>').attr({ class: "modal-body text-center" }).append(
                         $('<p>').text('ID:'),
-                        $('<input>').attr({ id: "euId", type: "text", name: "id", 'readonly': true }),
+                        $('<input>').attr({ id: "euId", type: "text", name: "id", class: "form-control", 'disabled': true }),
                         $('<p>').text('Имя:'),
-                        $('<input>').attr({ id: "euFirstName", type: "text", name: "firstName", 'required': true }),
+                        $('<input>').attr({ id: "euFirstName", type: "text", name: "firstName", class: "form-control", 'required': true }),
                         $('<p>').text('Фамилия:'),
-                        $('<input>').attr({ id: "euLastName", type: "text", name: "lastName", 'required': true }),
+                        $('<input>').attr({ id: "euLastName", type: "text", name: "lastName", class: "form-control", 'required': true }),
                         $('<p>').text('Возраст:'),
-                        $('<input>').attr({ id: "euAge", type: "number", step: "1", name: "age", 'required': true }),
+                        $('<input>').attr({ id: "euAge", type: "number", step: "1", name: "age", class: "form-control", 'required': true }),
                         $('<p>').text('E-mail:'),
-                        $('<input>').attr({ id: "euEmail", type: "email", name: "email", 'required': true }),
+                        $('<input>').attr({ id: "euEmail", type: "email", name: "email", class: "form-control", 'required': true }),
                         $('<p>').text('Пароль:'),
-                        $('<input>').attr({ id: "euPwd", type: "password", name: "password", 'required': true }),
+                        $('<input>').attr({ id: "euPwd", type: "password", name: "password", class: "form-control", 'required': true }),
                         $('<p>').text('Роль:'),
                         $('<p>').append(
-                            $('<select>').prop({ id: "euRoles", 'multiple': true, size: "3", name: "roles", 'required': true })
+                            $('<select>').prop({ id: "euRoles", 'multiple': true, size: "3", name: "roles", class: "form-control", 'required': true })
                         )
                     )
                 ).appendTo("#editModal div[class='modal-body']");

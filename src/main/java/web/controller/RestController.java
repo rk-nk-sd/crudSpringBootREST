@@ -129,7 +129,9 @@ public class RestController {
         user.setLastName(_user.getLastName());
         user.setAge(_user.getAge());
         user.setEmail(_user.getEmail());
-        user.setPassword(passwordEncoder.encode(_user.getPassword()));
+        if(_user.getPassword() != ""){
+            user.setPassword(passwordEncoder.encode(_user.getPassword()));
+        }
         user.setRoles(_user.getRoles());
 
         return ResponseEntity.ok(userService.update(user));
