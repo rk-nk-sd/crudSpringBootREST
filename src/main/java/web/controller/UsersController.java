@@ -34,8 +34,6 @@ public class UsersController {
             } else {
                 model.addAttribute("menu", "menuUser");
             }
-        model.addAttribute("userinfo", authentication);
-        model.addAttribute("user", userService.findByUserEmail(authentication.getName()));
         return "users/index";
     }
 

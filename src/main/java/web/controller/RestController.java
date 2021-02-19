@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
@@ -13,9 +12,7 @@ import web.repository.UserRepository;
 import web.service.RoleService;
 import web.service.UserService;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8088")
 @org.springframework.web.bind.annotation.RestController
@@ -53,31 +50,27 @@ public class RestController {
     }
 
 
-//    Разобраться
-    @GetMapping("/admin/roles/{id}/edit")
-    public ResponseEntity<Role> editRole (@PathVariable("id") Long id){
-        return ResponseEntity.ok(roleService.getCurrentRole(id));
-    }
-
-//    @PostMapping("/admin/roles")
-//    public String createUser (@ModelAttribute("role") @Valid Role role,
-//                              BindingResult bindingResult,
-//                              @RequestParam(name = "rolename") String rolename){
-//        if(bindingResult.hasErrors())
-//            return "admin/create_role";
-//
-//        role.setName(rolename);
-//        roleService.createRole(role);
-//
-//        return "redirect:/admin/roles";
+////    Разобраться
+//    @GetMapping("/admin/roles/{id}/edit")
+//    public ResponseEntity<Role> editRole (@PathVariable("id") Long id){
+//        return ResponseEntity.ok(roleService.getCurrentRole(id));
 //    }
 
-    @PatchMapping("/admin/roles/{id}")
-    public ResponseEntity<Role> update (@ModelAttribute("role") @Valid Role role){
-        return ResponseEntity.ok(roleService.update(role));
+    @PostMapping("/admin/roles")
+    public ResponseEntity<?> createUser (@RequestBody Role _role){
+        Role role = new Role();
+
+        role.setName(_role.getName());
+        roleService.createRole(role);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-//    Разобраться
+//    @PatchMapping("/admin/roles/{id}")
+//    public ResponseEntity<Role> update (@ModelAttribute("role") @Valid Role role){
+//        return ResponseEntity.ok(roleService.update(role));
+//    }
+
     @DeleteMapping("/admin/roles/{id}")
     public ResponseEntity delete ( @PathVariable("id") Long id) {
         roleService.delete(id);
@@ -134,6 +127,7 @@ public class RestController {
         if(_user.getAge()>0 && _user.getAge()<110) {
             user.setAge(_user.getAge());
         }
+        // по хорошему нужно сделать проверку на валидность email
         if(!_user.getEmail().isEmpty()) {
             user.setEmail(_user.getEmail());
         }
