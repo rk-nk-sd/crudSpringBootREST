@@ -125,14 +125,24 @@ public class RestController {
     public ResponseEntity<User> update (@PathVariable("id") int id, @RequestBody User _user ){ // @PathVariable("id") int id,
         User user = userService.getCurrentUser(id);
 
-        user.setFirstName(_user.getFirstName());
-        user.setLastName(_user.getLastName());
-        user.setAge(_user.getAge());
-        user.setEmail(_user.getEmail());
-        if(_user.getPassword() != ""){
+        if(!_user.getFirstName().isEmpty()) {
+            user.setFirstName(_user.getFirstName());
+        }
+        if(!_user.getLastName().isEmpty()) {
+            user.setLastName(_user.getLastName());
+        }
+        if(_user.getAge()>0 && _user.getAge()<110) {
+            user.setAge(_user.getAge());
+        }
+        if(!_user.getEmail().isEmpty()) {
+            user.setEmail(_user.getEmail());
+        }
+        if(!_user.getPassword().isEmpty()){
             user.setPassword(passwordEncoder.encode(_user.getPassword()));
         }
-        user.setRoles(_user.getRoles());
+        if(!_user.getRoles().isEmpty()) {
+            user.setRoles(_user.getRoles());
+        }
 
         return ResponseEntity.ok(userService.update(user));
     }
